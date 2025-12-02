@@ -5,20 +5,8 @@ public class DynamicBehaviour : MonoBehaviour
     [Header("Настройки древесины")]
     public float woodDensity = 500f; // кг/м³ (сосна: 400-600)
 
-    private PhysicsMaterial _physicsMaterial = null;
-
     void Awake()
     {
-        _physicsMaterial = new()
-        {
-            dynamicFriction = 0.6f,
-            staticFriction = 0.7f,
-            bounciness = 0.1f,
-
-            frictionCombine = PhysicsMaterialCombine.Average,
-            bounceCombine = PhysicsMaterialCombine.Average
-        };
-
         AddComponentsToChildren(transform);
     }
 
@@ -34,6 +22,15 @@ public class DynamicBehaviour : MonoBehaviour
 
             if (child.GetComponent<MeshCollider>() == null)
             {
+                PhysicsMaterial _physicsMaterial = new()
+                {
+                    dynamicFriction = 0.6f,
+                    staticFriction = 0.7f,
+                    bounciness = 0.1f,
+
+                    frictionCombine = PhysicsMaterialCombine.Average,
+                    bounceCombine = PhysicsMaterialCombine.Average
+                };
                 MeshCollider boxCollider = child.gameObject.AddComponent<MeshCollider>();
                 boxCollider.convex = true;
                 boxCollider.material = _physicsMaterial;
