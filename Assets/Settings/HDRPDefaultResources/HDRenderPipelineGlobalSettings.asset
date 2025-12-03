@@ -52,8 +52,8 @@ MonoBehaviour:
   lensAttenuationMode: 0
   colorGradingSpace: 0
   m_ObsoleteDiffusionProfileSettingsList:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 48e911a1e337b44e2b85dbc65b47a594, type: 2}
+  - {fileID: 11400000, guid: 879ffae44eefa4412bb327928f1a96dd, type: 2}
   specularFade: 0
   rendererListCulling: 0
   m_ObsoleteDefaultVolumeProfile: {fileID: 0}
@@ -167,57 +167,57 @@ MonoBehaviour:
       - rid: 8556427327610290181
       - rid: 8556427327610290182
       - rid: 8556427327610290183
-      - rid: 1489431949478199296
-      - rid: 1489431949478199297
-      - rid: 1489431949478199298
-      - rid: 1489431949478199299
-      - rid: 1489431949478199300
-      - rid: 1489431949478199301
-      - rid: 1489431949478199302
-      - rid: 1489431949478199303
-      - rid: 1489431949478199304
-      - rid: 1489431949478199305
-      - rid: 1489431949478199306
-      - rid: 1489431949478199307
-      - rid: 1489431949478199308
-      - rid: 1489431949478199309
-      - rid: 1489431949478199310
-      - rid: 1489431949478199311
-      - rid: 1489431949478199312
-      - rid: 1489431949478199313
-      - rid: 1489431949478199314
-      - rid: 1489431949478199315
-      - rid: 1489431949478199316
-      - rid: 1489431949478199317
-      - rid: 1489431949478199318
-      - rid: 1489431949478199319
-      - rid: 1489431949478199320
-      - rid: 1489431949478199321
-      - rid: 1489431949478199322
-      - rid: 1489431949478199323
+      - rid: 53599073135493120
+      - rid: 53599073135493121
+      - rid: 53599073135493122
+      - rid: 53599073135493123
+      - rid: 53599073135493124
+      - rid: 53599073135493125
+      - rid: 53599073135493126
+      - rid: 53599073135493127
+      - rid: 53599073135493128
+      - rid: 53599073135493129
+      - rid: 53599073135493130
+      - rid: 53599073135493131
+      - rid: 53599073135493132
+      - rid: 53599073135493133
+      - rid: 53599073135493134
+      - rid: 53599073135493135
+      - rid: 53599073135493136
+      - rid: 53599073135493137
+      - rid: 53599073135493138
+      - rid: 53599073135493139
+      - rid: 53599073135493140
+      - rid: 53599073135493141
+      - rid: 53599073135493142
+      - rid: 53599073135493143
+      - rid: 53599073135493144
+      - rid: 53599073135493145
+      - rid: 53599073135493146
+      - rid: 53599073135493147
     m_RuntimeSettings:
       m_List:
       - rid: 8556427327610290176
       - rid: 8556427327610290180
-      - rid: 1489431949478199296
-      - rid: 1489431949478199300
-      - rid: 1489431949478199301
-      - rid: 1489431949478199302
-      - rid: 1489431949478199303
-      - rid: 1489431949478199304
-      - rid: 1489431949478199305
-      - rid: 1489431949478199306
-      - rid: 1489431949478199309
-      - rid: 1489431949478199310
-      - rid: 1489431949478199311
-      - rid: 1489431949478199313
-      - rid: 1489431949478199315
-      - rid: 1489431949478199316
-      - rid: 1489431949478199319
-      - rid: 1489431949478199320
-      - rid: 1489431949478199321
-      - rid: 1489431949478199322
-      - rid: 1489431949478199323
+      - rid: 53599073135493120
+      - rid: 53599073135493124
+      - rid: 53599073135493125
+      - rid: 53599073135493126
+      - rid: 53599073135493127
+      - rid: 53599073135493128
+      - rid: 53599073135493129
+      - rid: 53599073135493130
+      - rid: 53599073135493133
+      - rid: 53599073135493134
+      - rid: 53599073135493135
+      - rid: 53599073135493137
+      - rid: 53599073135493139
+      - rid: 53599073135493140
+      - rid: 53599073135493143
+      - rid: 53599073135493144
+      - rid: 53599073135493145
+      - rid: 53599073135493146
+      - rid: 53599073135493147
   renderingLayerNames:
   - Light Layer default
   - Light Layer 1
@@ -262,12 +262,12 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1489431949478199296
+    - rid: 53599073135493120
       type: {class: HDRPDefaultVolumeProfileSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
         m_VolumeProfile: {fileID: 11400000, guid: 14b392ee213d25a48b1feddbd9f5a9be, type: 2}
-    - rid: 1489431949478199297
+    - rid: 53599073135493121
       type: {class: VolumetricCloudsRuntimeResources, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_VolumetricCloudsCS: {fileID: 7200000, guid: f911a8577fa9a4546a6b255bcf888baf, type: 3}
@@ -280,48 +280,48 @@ MonoBehaviour:
         m_WorleyNoise128RGBA: {fileID: 11700000, guid: 1fe54a721d0e2504e89f121c723404a8, type: 3}
         m_WorleyNoise32RGB: {fileID: 11700000, guid: ec156c314a242914dbb706f73ad78cf2, type: 3}
         m_PerlinNoise32RGB: {fileID: 11700000, guid: d1aae012f8a4f23478471851f17ff915, type: 3}
-    - rid: 1489431949478199298
+    - rid: 53599073135493122
       type: {class: LookDevVolumeProfileSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
         m_VolumeProfile: {fileID: 11400000, guid: 4594f4a3fb14247e192bcca6dc23c8ed, type: 2}
-    - rid: 1489431949478199299
+    - rid: 53599073135493123
       type: {class: DiffusionProfileDefaultSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
         m_AutoRegisterDiffusionProfiles: 0
-    - rid: 1489431949478199300
+    - rid: 53599073135493124
       type: {class: AnalyticDerivativeSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
         m_AnalyticDerivativeEmulation: 0
         m_AnalyticDerivativeDebugOutput: 0
-    - rid: 1489431949478199301
+    - rid: 53599073135493125
       type: {class: RenderGraphSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
         m_DynamicRenderPassCulling: 0
-    - rid: 1489431949478199302
+    - rid: 53599073135493126
       type: {class: SpecularFadeSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
         m_SpecularFade: 0
-    - rid: 1489431949478199303
+    - rid: 53599073135493127
       type: {class: ColorGradingSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
         m_ColorGradingSpace: 0
-    - rid: 1489431949478199304
+    - rid: 53599073135493128
       type: {class: LensSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
         m_LensAttenuationMode: 0
-    - rid: 1489431949478199305
+    - rid: 53599073135493129
       type: {class: WaterSystemGlobalSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 1
         m_EnableMaskAndCurrentWaterDecals: 0
-    - rid: 1489431949478199306
+    - rid: 53599073135493130
       type: {class: CustomPostProcessOrdersSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
@@ -340,7 +340,7 @@ MonoBehaviour:
         m_AfterPostProcessCustomPostProcesses:
           m_InjectionPoint: 2
           m_CustomPostProcessTypesAsString: []
-    - rid: 1489431949478199307
+    - rid: 53599073135493131
       type: {class: WaterSystemRuntimeResources, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_WaterMaterial: {fileID: -876546973899608171, guid: 3fda5e465882bec4d8e64161b681806c, type: 3}
@@ -358,7 +358,7 @@ MonoBehaviour:
         m_WaterFoamCS: {fileID: 7200000, guid: 0d16d14b783e65f4d81dbcece2bd0ef9, type: 3}
         m_WaterDecalMigrationShader: {fileID: -6465566751694194690, guid: 9f1661ed5b4d6ee4685ad5683b09a903, type: 3}
         m_FoamMask: {fileID: 2800000, guid: ca1d72d84c34dba4390eab4c86e62f62, type: 3}
-    - rid: 1489431949478199308
+    - rid: 53599073135493132
       type: {class: HDRenderPipelineEditorAssets, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_DefaultSettingsVolumeProfile: {fileID: 11400000, guid: f940a8037e6cda542891dc1aac1fa4e8, type: 2}
@@ -366,7 +366,7 @@ MonoBehaviour:
         m_DefaultDiffusionProfileSettingsList:
         - {fileID: 11400000, guid: 404820c4cf36ad944862fa59c56064f0, type: 2}
         - {fileID: 11400000, guid: 2384dbf2c1c420f45a792fbc315fbfb1, type: 2}
-    - rid: 1489431949478199309
+    - rid: 53599073135493133
       type: {class: HDRenderPipelineRuntimeShaders, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_DefaultShader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
@@ -550,7 +550,7 @@ MonoBehaviour:
         m_AlphaInjectionPS: {fileID: 4800000, guid: 4edd96259a5e8b44c90479928f0cd11e, type: 3}
         m_ChromaKeyingPS: {fileID: 4800000, guid: 49feb6b111e82ec4eb6d3d08e4b6903e, type: 3}
         m_CustomClearPS: {fileID: 4800000, guid: 9cef3686fa32c8840947ed99b561195c, type: 3}
-    - rid: 1489431949478199310
+    - rid: 53599073135493134
       type: {class: RenderingPathFrameSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
@@ -602,45 +602,45 @@ MonoBehaviour:
           sssCustomDownsampleSteps: 0
           msaaMode: 1
           materialQuality: 0
-    - rid: 1489431949478199311
+    - rid: 53599073135493135
       type: {class: HDRenderPipelineRuntimeMaterials, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_PBRSkyMaterial: {fileID: -876546973899608171, guid: 02532cbb810fb404db49da84f1efe41e, type: 3}
         m_AreaLightMaterial: {fileID: 2100000, guid: ef5f65c980e25304098a95e28f3bd20b, type: 2}
         m_AreaLightCookieMaterial: {fileID: 2100000, guid: 78c6825c5d9c3664f9879ae8609618c7, type: 2}
-    - rid: 1489431949478199312
+    - rid: 53599073135493136
       type: {class: HDRenderingLayersLimitSettings, ns: UnityEditor.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Editor}
       data:
         m_Version: 0
-    - rid: 1489431949478199313
+    - rid: 53599073135493137
       type: {class: ProbeVolumeGlobalSettings, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_Version: 1
         m_ProbeVolumeDisableStreamingAssets: 0
-    - rid: 1489431949478199314
+    - rid: 53599073135493138
       type: {class: STP/RuntimeResources, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_setupCS: {fileID: 7200000, guid: 33be2e9a5506b2843bdb2bdff9cad5e1, type: 3}
         m_preTaaCS: {fileID: 7200000, guid: a679dba8ec4d9ce45884a270b0e22dda, type: 3}
         m_taaCS: {fileID: 7200000, guid: 3923900e2b41b5e47bc25bfdcbcdc9e6, type: 3}
-    - rid: 1489431949478199315
+    - rid: 53599073135493139
       type: {class: RenderGraphGlobalSettings, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_version: 0
         m_EnableCompilationCaching: 1
         m_EnableValidityChecks: 1
-    - rid: 1489431949478199316
+    - rid: 53599073135493140
       type: {class: ShaderStrippingSetting, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_Version: 0
         m_ExportShaderVariants: 1
         m_ShaderVariantLogLevel: 0
         m_StripRuntimeDebugShaders: 0
-    - rid: 1489431949478199317
+    - rid: 53599073135493141
       type: {class: RenderingDebuggerRuntimeResources, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_version: 0
-    - rid: 1489431949478199318
+    - rid: 53599073135493142
       type: {class: ProbeVolumeBakingResources, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_Version: 1
@@ -653,14 +653,14 @@ MonoBehaviour:
         skyOcclusionRT: {fileID: -5126288278712620388, guid: 5a2a534753fbdb44e96c3c78b5a6999d, type: 3}
         renderingLayerCS: {fileID: -6772857160820960102, guid: 94a070d33e408384bafc1dea4a565df9, type: 3}
         renderingLayerRT: {fileID: -5126288278712620388, guid: 94a070d33e408384bafc1dea4a565df9, type: 3}
-    - rid: 1489431949478199319
+    - rid: 53599073135493143
       type: {class: ProbeVolumeRuntimeResources, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_Version: 1
         probeVolumeBlendStatesCS: {fileID: 7200000, guid: a3f7b8c99de28a94684cb1daebeccf5d, type: 3}
         probeVolumeUploadDataCS: {fileID: 7200000, guid: 0951de5992461754fa73650732c4954c, type: 3}
         probeVolumeUploadDataL2CS: {fileID: 7200000, guid: 6196f34ed825db14b81fb3eb0ea8d931, type: 3}
-    - rid: 1489431949478199320
+    - rid: 53599073135493144
       type: {class: VrsRenderPipelineRuntimeResources, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_TextureComputeShader: {fileID: 7200000, guid: cacb30de6c40c7444bbc78cb0a81fd2a, type: 3}
@@ -687,17 +687,17 @@ MonoBehaviour:
           - {r: 0.5, g: 0, b: 0.5, a: 1}
           - {r: 0.5, g: 0.5, b: 0.5, a: 1}
           - {r: 0, g: 0, b: 1, a: 1}
-    - rid: 1489431949478199321
+    - rid: 53599073135493145
       type: {class: RenderGraphUtilsResources, ns: UnityEngine.Rendering.RenderGraphModule.Util, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_Version: 0
         m_CoreCopyPS: {fileID: 4800000, guid: 12dc59547ea167a4ab435097dd0f9add, type: 3}
-    - rid: 1489431949478199322
+    - rid: 53599073135493146
       type: {class: LightmapSamplingSettings, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_Version: 1
         m_UseBicubicLightmapSampling: 0
-    - rid: 1489431949478199323
+    - rid: 53599073135493147
       type: {class: ProbeVolumeDebugResources, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_Version: 1
