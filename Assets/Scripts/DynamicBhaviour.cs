@@ -17,9 +17,7 @@ public class DynamicBehaviour : MonoBehaviour
     private PhysicsMaterial _physicsMaterial = null;
     private readonly SortedDictionary<float, Geom> _info = new();
 
-
-    private readonly Dictionary<string, Transform> _joinOn = new();
-
+    private readonly Dictionary<string, List<Transform>> _joinOn = new();
 
     private bool IsMesh(Transform child) => child.name.ToLowerInvariant().Contains("mesh");
 
@@ -28,6 +26,8 @@ public class DynamicBehaviour : MonoBehaviour
         CollectJoinsOn(transform);
 
         AddComponentsToChildren(transform);
+
+        AttachJoinsFor(transform);
 
         _physicsMaterial = CreateDefault();
 
@@ -44,12 +44,22 @@ public class DynamicBehaviour : MonoBehaviour
                 continue;
             }
 
-            var parentName = child.parent.name.ToLowerInvariant();
-            if (parentName.Contains("joinon"))
+            var parentName = GetParentGroupName(child, 1);
+            if (!parentName.Contains("joinon"))
             {
-                var index = parentName.Replace("joinon", "");
-                _joinOn[index] = child;
+                continue;
             }
+
+            string parentGroupName = GetParentGroupName(child, int.MaxValue);
+            string index = GetPure("joinon", parentName, parentGroupName);
+
+            if (!_joinOn.TryGetValue(index, out List<Transform> list))
+            {
+                list = new List<Transform>();
+                _joinOn[index] = list;
+            }
+
+            list.Add(child);
         }
     }
 
@@ -84,20 +94,64 @@ public class DynamicBehaviour : MonoBehaviour
 
                 _info[mass] = new Geom(parent.name, size);
             }
+        }
+    }
 
-            var parentName = child.parent.name.ToLowerInvariant();
-            if (parentName.Contains("jointo"))
+    private void AttachJoinsFor(Transform parent)
+    {
+        foreach (Transform child in parent)
+        {
+            if (!IsMesh(child))
             {
-                var index = parentName.Replace("jointo", "");
-                FixedJoint joint = child.gameObject.AddComponent<FixedJoint>();
+                AttachJoinsFor(child);
+                continue;
+            }
 
-                Transform defaultTransform = _joinOn[index];
+            string parentName = GetParentGroupName(child, 1);
+            if (parentName.Contains("joinfor"))
+            {
+                string parentGroupName = GetParentGroupName(child, int.MaxValue);
+                string index = GetPure("joinfor", parentName, parentGroupName);
+                Transform[] transforms = _joinOn[index].ToArray();
+                foreach (Transform transform in transforms)
+                {
+                    FixedJoint joint = child.gameObject.AddComponent<FixedJoint>();
 
-                joint.connectedBody = defaultTransform.GetComponent<Rigidbody>();
-                joint.breakForce = 10000f;              // Сила разрыва (0 = бесконечно)
-                joint.breakTorque = 10000f;             // Момент разрыва
+                    Rigidbody connectedBody = child.GetComponent<Rigidbody>();
+                    Debug.Assert(connectedBody != null);
+
+                    joint.connectedBody = connectedBody;
+                    joint.breakForce = 10000f;              // Сила разрыва (0 = бесконечно)
+                    joint.breakTorque = 10000f;             // Момент разрыва
+                }
             }
         }
+    }
+
+    private static string GetPure(string prefix, string parentName, string parentGroupName)
+    {
+        string index = parentName.Replace(prefix, "");
+        if (char.IsLetter(index[^1]))
+        {
+            index = index[..^1];
+        }
+
+        return $"{parentGroupName}:{index}";
+    }
+
+    private string GetParentGroupName(Transform current, int level)
+    {
+        if (level == 1)
+        {
+            return current.parent.name.ToLowerInvariant();
+        }
+
+        if (current.name.ToLowerInvariant().Contains("group"))
+        {
+            return current.name.ToLowerInvariant();
+        }
+
+        return GetParentGroupName(current.parent, int.MaxValue);
     }
 
     private static PhysicsMaterial CreateDefault()
