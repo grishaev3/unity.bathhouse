@@ -98,8 +98,8 @@ public class DynamicBehaviour : MonoBehaviour
 
                 //rigidbody.mass = mass;
                 rigidbody.useGravity = true;
-                //rigidbody.solverIterations = SolverIterations;
-                //rigidbody.solverVelocityIterations = SolverVelocityIterations;
+                rigidbody.solverIterations = SolverIterations;
+                rigidbody.solverVelocityIterations = SolverVelocityIterations;
                 rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
                 //rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
