@@ -12,6 +12,9 @@ public class DynamicBehaviour : MonoBehaviour
     [Header("Solver Iterations")]
     public int SolverIterations = 20;
 
+    [Header("Solver Velocity Iterations")]
+    public int SolverVelocityIterations = 8;
+
     private const int _inMM = 1000;
 
     private PhysicsMaterial _physicsMaterial = null;
@@ -23,13 +26,13 @@ public class DynamicBehaviour : MonoBehaviour
 
     void Awake()
     {
+        _physicsMaterial = CreateDefault();
+
         CollectJoinsOn(transform);
 
         AddComponentsToChildren(transform);
 
         AttachJoinsFor(transform);
-
-        _physicsMaterial = CreateDefault();
 
         CollectInfo();
     }
@@ -51,12 +54,12 @@ public class DynamicBehaviour : MonoBehaviour
             }
 
             string parentGroupName = GetParentGroupName(child, int.MaxValue);
-            string index = GetPure("joinon", parentName, parentGroupName);
+            string key = GetKey("joinon", parentName, parentGroupName);
 
-            if (!_joinOn.TryGetValue(index, out List<Transform> list))
+            if (!_joinOn.TryGetValue(key, out List<Transform> list))
             {
                 list = new List<Transform>();
-                _joinOn[index] = list;
+                _joinOn[key] = list;
             }
 
             list.Add(child);
@@ -73,26 +76,34 @@ public class DynamicBehaviour : MonoBehaviour
                 continue;
             }
 
-            MeshCollider сollider = child.gameObject.AddComponent<MeshCollider>();
-            сollider.sharedMesh = child.GetComponent<MeshFilter>().sharedMesh;
-            сollider.material = _physicsMaterial;
-            сollider.convex = true;
+            float mass = 0f;
+            Vector3 size = Vector3.zero;
+            MeshFilter meshFilter = child.GetComponent<MeshFilter>();
+            if (meshFilter != null && meshFilter.sharedMesh != null)
+            {
+                Mesh yourMesh = meshFilter.sharedMesh;
+                MeshCollider сollider = child.gameObject.AddComponent<MeshCollider>();
+                сollider.sharedMesh = yourMesh;
+                сollider.material = _physicsMaterial;
+                сollider.convex = true;
 
-            Vector3 size = сollider.bounds.size;
-            float mass = woodDensity * size.x * size.y * size.z;
+                size = сollider.bounds.size;
+                mass = (woodDensity * size.x * size.y * size.z);
+            }
 
             Renderer renderer = child.GetComponent<Renderer>();
             if (child.GetComponent<Rigidbody>() == null && renderer != null)
             {
                 Rigidbody rigidbody = child.gameObject.AddComponent<Rigidbody>();
 
-                rigidbody.mass = mass;
+                //rigidbody.mass = mass;
                 rigidbody.useGravity = true;
-                rigidbody.solverIterations = SolverIterations;
+                //rigidbody.solverIterations = SolverIterations;
+                //rigidbody.solverVelocityIterations = SolverVelocityIterations;
                 rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-                rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                //rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
-                _info[mass] = new Geom(parent.name, size);
+                _info[mass] = new Geom(child.name, size);
             }
         }
     }
@@ -111,25 +122,41 @@ public class DynamicBehaviour : MonoBehaviour
             if (parentName.Contains("joinfor"))
             {
                 string parentGroupName = GetParentGroupName(child, int.MaxValue);
-                string index = GetPure("joinfor", parentName, parentGroupName);
-                Transform[] transforms = _joinOn[index].ToArray();
-                foreach (Transform transform in transforms)
+                string key = GetKey("joinfor", parentName, parentGroupName);
+                Transform[] transforms = _joinOn[key].ToArray();
+                foreach (Transform target in transforms)
                 {
                     FixedJoint joint = child.gameObject.AddComponent<FixedJoint>();
 
-                    Rigidbody connectedBody = child.GetComponent<Rigidbody>();
+                    Rigidbody connectedBody = target.GetComponent<Rigidbody>();
                     Debug.Assert(connectedBody != null);
 
                     joint.connectedBody = connectedBody;
-                    joint.breakForce = 10000f;              // Сила разрыва (0 = бесконечно)
-                    joint.breakTorque = 10000f;             // Момент разрыва
+                    joint.breakForce = Mathf.Infinity;
+                    joint.breakTorque = Mathf.Infinity;
+                    joint.enableCollision = false;
                 }
             }
         }
     }
 
-    private static string GetPure(string prefix, string parentName, string parentGroupName)
+    private static string GetKey(string prefix, string parentName, string parentGroupName)
     {
+        switch (parentName.Length)
+        {
+            // JoinOn3
+            case 7:
+                break;
+            // joinOn1A
+            case 8:
+                break;
+            // joinOn1A1
+            default:
+                parentName = parentName[..8];
+                break;
+
+        }
+
         string index = parentName.Replace(prefix, "");
         if (char.IsLetter(index[^1]))
         {
@@ -160,7 +187,7 @@ public class DynamicBehaviour : MonoBehaviour
         {
             dynamicFriction = 0.6f,
             staticFriction = 0.7f,
-            bounciness = 0.1f,
+            bounciness = 0.2f,
 
             frictionCombine = PhysicsMaterialCombine.Average,
             bounceCombine = PhysicsMaterialCombine.Average

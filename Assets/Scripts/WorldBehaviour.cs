@@ -2,24 +2,26 @@
 
 public class WorldBehaviour : MonoBehaviour
 {
-    // Settings
-    // Fixed Timestep 0.02 => 0.01
-    // Default Solver Iterations 6 => 20
-    // Default Solver Velocity Iterations 1 => 8
-    // Default Contact Offset: 0.01 → 0.001 (точнее контакты)
-
     [Header("Настройки FPS")]
     public int targetFPS = 60;
 
     void Start()
     {
-        // Отключаем VSync для полного контроля
-        QualitySettings.vSyncCount = 0;
-
-        // Ограничиваем FPS
+        QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = targetFPS;
 
         Time.timeScale = 0.2f;
-        Time.fixedDeltaTime = 0.01f * Time.timeScale;
+
+        // Fixed Timestep 0.02 => 0.01
+        Time.fixedDeltaTime = 1 / 100f;
+
+    //    // Default Contact Offset: 0.01 → 0.001 (точнее контакты)
+    //    Physics.defaultContactOffset = 0.001f;
+
+    //    // Default Solver Iterations 6 => 20
+    //    Physics.defaultSolverIterations = 20;
+
+    //    // Default Solver Velocity Iterations 1 => 8
+    //    Physics.defaultSolverVelocityIterations = 8;
     }
 }
