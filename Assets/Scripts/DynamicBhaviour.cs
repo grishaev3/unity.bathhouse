@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.Collections.Generic;
+using Assets;
 using UnityEngine;
 
 public class DynamicBehaviour : MonoBehaviour
@@ -15,26 +13,29 @@ public class DynamicBehaviour : MonoBehaviour
     [Header("Solver Velocity Iterations")]
     public int SolverVelocityIterations = 8;
 
-    private const int _inMM = 1000;
+
+    [Header("Debug Info")]
+    public bool debug = false;
 
     private PhysicsMaterial _physicsMaterial = null;
-    private readonly SortedDictionary<float, Geom> _info = new();
-
     private readonly Dictionary<string, List<Transform>> _joinOn = new();
-
     private bool IsMesh(Transform child) => child.name.ToLowerInvariant().Contains("mesh");
 
     void Awake()
     {
         _physicsMaterial = CreateDefault();
 
+        if (debug)
+        {
+            Dictionary<string, List<Vector3>> info = GetChildPositions(transform);
+            IO.CollectSceneInfo(info);
+        }
+
         CollectJoinsOn(transform);
 
         AddComponentsToChildren(transform);
 
         AttachJoinsFor(transform);
-
-        CollectInfo();
     }
 
     private void CollectJoinsOn(Transform parent)
@@ -102,8 +103,6 @@ public class DynamicBehaviour : MonoBehaviour
                 rigidbody.solverVelocityIterations = SolverVelocityIterations;
                 rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
                 //rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-
-                _info[mass] = new Geom(child.name, size);
             }
         }
     }
@@ -185,27 +184,44 @@ public class DynamicBehaviour : MonoBehaviour
     {
         return new()
         {
-            dynamicFriction = 0.6f,
-            staticFriction = 0.7f,
-            bounciness = 0.2f,
+            dynamicFriction = 0.7f,
+            staticFriction = 0.8f,
+            bounciness = 0.05f,
 
             frictionCombine = PhysicsMaterialCombine.Average,
             bounceCombine = PhysicsMaterialCombine.Average
         };
     }
 
-    private void CollectInfo()
+    private Dictionary<string, List<Vector3>> GetChildPositions(Transform transform)
     {
-        StringBuilder builder = new();
-        foreach (float key in _info.Keys)
-        {
-            int x = (int)Math.Floor(_info[key].Size.x * _inMM);
-            int y = (int)Math.Floor(_info[key].Size.y * _inMM);
-            int z = (int)Math.Floor(_info[key].Size.z * _inMM);
+        var childTransforms = transform.GetComponentsInChildren<Transform>();
 
-            builder.AppendLine($"{key} : {_info[key].Name} - ( {x} {y} {z})");
+        var result = new Dictionary<string, List<Vector3>>();
+
+        foreach (Transform child in childTransforms)
+        {
+            if (child == transform || !IsMesh(child)) // Исключаем родителя
+            {
+                continue;
+            }
+
+            MeshFilter meshFilter = child.GetComponent<MeshFilter>();
+            if (meshFilter == null || meshFilter.mesh == null)
+            {
+                Debug.LogError("MeshFilter или mesh не найден!");
+                continue;
+            }
+
+            if (!result.TryGetValue(child.name, out List<Vector3> list))
+            {
+                list = new List<Vector3>();
+                result[child.name] = list;
+            }
+
+            list.AddRange(meshFilter.mesh.vertices);
         }
 
-        File.WriteAllText("info.txt", builder.ToString());
+        return result;
     }
 }

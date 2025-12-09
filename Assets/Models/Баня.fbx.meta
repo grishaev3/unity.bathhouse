@@ -3,7 +3,22 @@ guid: 4748cbb166844f445af4cb35bae0089d
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood_Lumber_ButtJoined
+    second: {fileID: 2100000, guid: d6b67552f68ad3d44be3b8beaf2a9dfa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood_OSB
+    second: {fileID: 2100000, guid: 0186ce3463e77894abf47e777c48b72f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood_Veneer_15_1K
+    second: {fileID: 2100000, guid: e4b2ca5ccb0ff634f848555b9eec6e92, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
