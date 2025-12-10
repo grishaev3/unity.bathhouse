@@ -60,16 +60,21 @@ namespace Assets.Scripts
             maxValue = max;
         }
 
-        public int Next()
+        public int SafeNext()
         {
-            int value;
-            do
-            {
-                value = random.Next(minValue, maxValue);
-            } while (value == lastValue);
-
-            lastValue = value;
-            return value;
+            return random.Next(minValue, maxValue);
         }
+
+        //public int Next()
+        //{
+        //    int value;
+        //    do
+        //    {
+        //        value = random.Next(minValue, maxValue);
+        //    } while (value == lastValue);
+
+        //    lastValue = value;
+        //    return value;
+        //}
     }
 }
