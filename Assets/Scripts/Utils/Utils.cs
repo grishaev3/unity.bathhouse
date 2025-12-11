@@ -56,25 +56,31 @@ namespace Assets.Scripts
 
         public UniqueRandom(int min, int max)
         {
-            minValue = min;
+            lastValue = minValue = min;
             maxValue = max;
         }
 
-        public int SafeNext()
-        {
-            return random.Next(minValue, maxValue);
-        }
-
-        //public int Next()
+        //public int SafeNext()
         //{
-        //    int value;
-        //    do
-        //    {
-        //        value = random.Next(minValue, maxValue);
-        //    } while (value == lastValue);
-
-        //    lastValue = value;
-        //    return value;
+        //    return random.Next(minValue, maxValue);
         //}
+
+        public int Next()
+        {
+            var tryNumber = 0;
+
+            int value;
+            do
+            {
+                value = random.Next(minValue, maxValue + 1);
+                tryNumber += 1;
+                if (tryNumber > 10)
+                    break;
+
+            } while (value == lastValue);
+
+            lastValue = value;
+            return value;
+        }
     }
 }

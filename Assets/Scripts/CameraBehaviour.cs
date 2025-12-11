@@ -2,11 +2,7 @@ using Assets.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
 
 
 abstract class CameraBase
@@ -51,7 +47,6 @@ class LinearBase : CameraBase
         Z
     }
 
-
     public LinearBase(TimeSpan duration, Vector3 direction, Func<float, CameraBase, Vector3> func, string name, Bounds bounds)
     {
         _direction = direction;
@@ -67,9 +62,12 @@ class LinearBase : CameraBase
 
     public Vector3 B { get; set; }
 
+    /// direction.x = -1 +1 направление
+    /// direction.y < 1.0f коеффициент 
+    /// direction.z minValue maxValue по объёму
     public override void Reset(Bounds bound)
     {
-        float start, end, x, y, z;
+        float start, end, z;
         switch (GetDirectionType(_direction))
         {
             case DirectionType.Zero:
@@ -79,15 +77,24 @@ class LinearBase : CameraBase
                 start = _direction.x > 0 ? bound.min.x : bound.max.x;
                 end = _direction.x > 0 ? bound.max.x : bound.min.x;
                 z = IsBound(_direction.z) ? (_direction.z > 0 ? bound.max.z : bound.min.z) : 0f;
+                var height = bound.min.y + bound.size.y * _direction.y;
 
-                A = new Vector3(start, _direction.y, z);
-                B = new Vector3(end, _direction.y, z);
+                A = new Vector3(start, height, z);
+                B = new Vector3(end, height, z);
 
                 break;
             case DirectionType.Y:
+
+                start = _direction.y > 0 ? bound.min.y : bound.max.y;
+                end = _direction.y > 0 ? bound.max.y : bound.min.y;
+                z = IsBound(_direction.z) ? (_direction.z > 0 ? bound.max.z : bound.min.z) : 0f;
+
+                A = new Vector3(_direction.x, start, z);
+                B = new Vector3(_direction.x, end, z);
+
                 break;
             case DirectionType.Z:
-                break;
+                throw new NotImplementedException();
         }
 
         static DirectionType GetDirectionType(Vector3 v)
@@ -106,7 +113,7 @@ class LinearBase : CameraBase
 
         static bool IsBound(float x)
         {
-            return Mathf.Abs(x) == float.MaxValue;
+            return Mathf.Abs(x) == float.MaxValue || Mathf.Abs(x) == float.MinValue;
         }
     }
 }
@@ -135,13 +142,13 @@ public class CameraBehaviour : MonoBehaviour
 {
     private readonly Bounds[] _localBounds = new Bounds[] {
         // весь доступный
-        new(new Vector3(0f, 0f, -2f), new Vector3(6f, 7f, 8f)),
+        FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(6f, 6f, 8f)),
 
-        // внутри дома 1-ый эт
-        //new(new Vector3(0f, 0.25f, -2f), new Vector3(5f, 2.4f, 3f)),
+        //// внутри дома 1-ый эт
+        //FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f)),
 
-        // внутри дома 2-ой эт.
-        //new(new Vector3(0f, 2.7f, 2f), new Vector3(6f, 2.7f, 4f))
+        //// внутри дома 2-ой эт.
+        //FromZero(new Vector3(0f, 3.10f, -2f), new Vector3(3.60f, 2.10f, 3f))
     };
 
     private double _msCurrentTime = 0d;
@@ -155,26 +162,26 @@ public class CameraBehaviour : MonoBehaviour
 
     void Awake()
     {
-
-        Bounds bound = _localBounds[0];
+        _uniqueRandom["bound_index"] = new UniqueRandom(0, _localBounds.Length);
+        _currentBoundIndex = _uniqueRandom["bound_index"].Next();
+        Bounds bound = _localBounds.ElementAtOrDefault(_currentBoundIndex);
 
         _modes = new()
         {
             //new SphereModel { Duration = TimeSpan.FromSeconds(20), Func = Sphere, Name = "Sphere"},
             //new LinearRandom(TimeSpan.FromSeconds(10), Linear, "Random", bound),
 
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1f, 2.0f, +float.MaxValue), Linear, "LeftToRight", bound), //front
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1f, 2.0f, -float.MaxValue), Linear, "LeftToRight", bound), //back
+            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRight", bound), //front
+            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRight", bound), //back
 
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1f, 2.0f, +float.MaxValue), Linear, "RightToLeft", bound), //front
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1f, 2.0f, -float.MaxValue), Linear, "RightToLeft", bound), //back
+            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeft", bound), //front
+            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeft", bound), //back
 
+            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUp", bound), //front
+            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUp", bound), //back
 
-            //new LinearBase { Duration = TimeSpan.FromSeconds(14), A = new Vector3(-_range.x, 0.25f, _range.z), B = new Vector3(-_range.x, _range.y, _range.z), Func = Linear, Name = "DownToUp" },
-            //new LinearBase { Duration = TimeSpan.FromSeconds(14), A = new Vector3(+_range.x, 0.25f, _range.z), B = new Vector3(+_range.x, _range.y, _range.z), Func = Linear, Name = "DownToUp" },
-
-            //new LinearBase { Duration = TimeSpan.FromSeconds(14), A = new Vector3(-_range.x, _range.y, -_range.z), B = new Vector3(-_range.x, 0.25f, -_range.z), Func = Linear, Name = "UpToDown" },
-            //new LinearBase { Duration = TimeSpan.FromSeconds(14), A = new Vector3(+_range.x, _range.y, -_range.z), B = new Vector3(+_range.x, 0.25f, -_range.z), Func = Linear, Name = "UpToDown" },
+            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUp", bound), //front
+            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUp", bound), //back
 
         };
         for (int i = 0; i < _modes.Count; i++)
@@ -183,7 +190,7 @@ public class CameraBehaviour : MonoBehaviour
         }
 
         _uniqueRandom["camera_mode_index"] = new UniqueRandom(0, _modes.Count);
-        _uniqueRandom["bound_index"] = new UniqueRandom(0, _localBounds.Length);
+        
 
         SelectUniqueModeAndLog();
     }
@@ -200,9 +207,20 @@ public class CameraBehaviour : MonoBehaviour
         Vector3 position = model.Func(normalizedTime, model);
 
         transform.position = position;
-        transform.LookAt(new Vector3(0f, 2f, -2f));
+        transform.LookAt(new Vector3(position.x, position.y, -2f));
 
         CheckAndReset(normalizedTime);
+    }
+
+    private static Bounds FromZero(Vector3 center, Vector3 size)
+    {
+        Bounds bounds = new()
+        {
+            min = new Vector3(-size.x / 2f, center.y, center.z + (-size.z / 2f)),
+            max = new Vector3(+size.x / 2f, center.y + size.y, center.z + (+size.z / 2f))
+        };
+
+        return bounds;
     }
 
     private void CheckAndReset(float normalizedTime)
@@ -218,13 +236,8 @@ public class CameraBehaviour : MonoBehaviour
 
         _modes.ForEach(x =>
         {
-            _currentBoundIndex = _uniqueRandom["bound_index"].SafeNext();
+            _currentBoundIndex = _uniqueRandom["bound_index"].Next();
             Bounds bound = _localBounds.ElementAtOrDefault(_currentBoundIndex);
-
-            if (bound == null)
-            {
-                Debug.Break();
-            }
 
             x.Reset(bound);
         });
@@ -265,7 +278,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private void SelectUniqueModeAndLog()
     {
-        _currentMode = _uniqueRandom["camera_mode_index"].SafeNext();
+        _currentMode = _uniqueRandom["camera_mode_index"].Next();
         CameraBase model = _modes.Find(x => x.Index == _currentMode);
         Debug.Log($"_currentMode: {model.Name}-{model.Index}");
     }
