@@ -36,7 +36,7 @@ namespace Assets.Scripts
         public int Count => count;
     }
 
-    public class Vector3Extender 
+    public class Vector3Extender
     {
         public static Vector3 Random(Bounds bounds)
         {
@@ -48,33 +48,23 @@ namespace Assets.Scripts
         }
     }
 
-    public class UniqueRandom
+    public static class UniqueRandom
     {
-        private readonly System.Random random = new System.Random();
-        private readonly int minValue, maxValue;
-        private int lastValue;
 
-        public UniqueRandom(int min, int max)
+        public static bool NextBool()
         {
-            lastValue = minValue = min;
-            maxValue = max;
+            return UnityEngine.Random.Range(1, 101) % 2 == 0;
         }
 
-        //public int SafeNext()
-        //{
-        //    return random.Next(minValue, maxValue);
-        //}
-
-        public int Next()
+        public static int Next(int minValue, int maxValue, int lastValue)
         {
             var tryNumber = 0;
 
             int value;
             do
             {
-                value = random.Next(minValue, maxValue + 1);
-                tryNumber += 1;
-                if (tryNumber > 10)
+                value = UnityEngine.Random.Range(minValue, maxValue);
+                if ((tryNumber += 1) > 10)
                     break;
 
             } while (value == lastValue);
