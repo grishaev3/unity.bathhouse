@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
@@ -6,13 +7,18 @@ class BoundManager : IResetable
 {
     private int _currentBoundIndex = default;
 
+    public BoundManager()
+    {
+        
+    }
+
     private readonly (string name, float freq, Bounds bound)[] _bounds = new (string name, float freq, Bounds bound)[]
     {
-        ("¬нутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f)) ),
+        ("¬нутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f))),
 
-        ("¬нутри дома 2-ой эт.", 0.2f, FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f)) ),
+        ("¬нутри дома 2-ой эт.", 0.2f, FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f))),
 
-        ("√лобальный обЄм", 0.8f, FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(6f, 6f, 8f)) ),
+        ("√лобальный обЄм", 0.8f, FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f))),
     };
 
     public (string name, Bounds bound) ActiveBound
@@ -25,7 +31,9 @@ class BoundManager : IResetable
 
     public void Reset(object o = null)
     {
-        _currentBoundIndex = UniqueRandom.Next(0, _bounds.Count(), _currentBoundIndex);
+        _currentBoundIndex = o != null ? 
+            Array.FindIndex(_bounds, x => x.name == (string)o) : 
+            UniqueRandom.Next(0, _bounds.Count(), _currentBoundIndex);
     }
 
     public int Count => _bounds.Length;

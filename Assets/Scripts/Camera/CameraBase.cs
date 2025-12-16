@@ -1,7 +1,17 @@
 using System;
 using UnityEngine;
 
-abstract class CameraBase
+public interface IPeriod
+{
+    public TimeSpan Duration { get; set; }
+}
+
+public class Period : IPeriod
+{
+    public TimeSpan Duration { get; set; }
+}
+
+abstract class CameraBase : IPeriod
 {
     protected Vector3 _direction;
 
@@ -10,14 +20,6 @@ abstract class CameraBase
     public string Name { get; set; }
 
     public TimeSpan Duration { get; set; }
-
-    public bool isDirection(float x) => Mathf.Abs(x) == 1f;
-
-    //public Bounds Bounds { get; set; } = new Bounds()
-    //{
-    //    min = new Vector3 { x = 8f, y = 0.25f, z = 6f },
-    //    max = new Vector3 { x = 8f, y = 8.0f, z = 6f }
-    //};
 
     public Func<float, CameraBase, Vector3> Func { get; set; }
 

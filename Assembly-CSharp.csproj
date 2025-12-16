@@ -61,6 +61,7 @@
     <Analyzer Include="E:\Projects\6000.2.12f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Manager\TimeManager.cs" />
     <Compile Include="Assets\Scripts\Camera\LinearRandom.cs" />
     <Compile Include="Assets\Scripts\Camera\LinearBase.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Utils\IO.cs" />
     <Compile Include="Assets\Scripts\Types\MeshData.cs" />
+    <Compile Include="Assets\Scripts\SunBehaviour.cs" />
     <Compile Include="Assets\Scripts\Types\OverlapChecker.cs" />
     <Compile Include="Assets\Scripts\Manager\StateManager.cs" />
     <Compile Include="Assets\Scripts\WorldBehaviour.cs" />
