@@ -7,9 +7,6 @@ public class WorldBehaviour : MonoBehaviour
     [Header("Настройки FPS")]
     public int targetFPS = 60;
 
-    [Header("Симуляция физики")]
-    public bool physicsEnable = false;
-
     [Header("Секунд в часе")]
     public int timeDuration = 10;
 

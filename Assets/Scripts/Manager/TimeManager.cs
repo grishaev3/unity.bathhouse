@@ -15,6 +15,24 @@ class TimeManager : IResetable
         return (float)normalizedTime;
     }
 
+    public float GetNormalizedTimeOfDay(float normalizedTime, TimeSpan a, TimeSpan b)
+    {
+        return (float)(Lerp(a, b, normalizedTime).TotalSeconds / TimeSpan.FromDays(1).TotalSeconds);
+    }
+
+    public static TimeSpan Lerp(TimeSpan start, TimeSpan end, float t)
+    {
+        // Преобразование TimeSpan в общее количество тиков (100-наносекундные интервалы)
+        long startTicks = start.Ticks;
+        long endTicks = end.Ticks;
+
+        // Линейная интерполяция тиков
+        long lerpedTicks = (long)(startTicks + (endTicks - startTicks) * t);
+
+        // Возврат нового TimeSpan
+        return new TimeSpan(lerpedTicks);
+    }
+
     public void Reset(object o = null)
     {
         _msCurrentTime = 0d;

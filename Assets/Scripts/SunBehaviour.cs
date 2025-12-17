@@ -1,13 +1,18 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
+using static UnityEngine.Rendering.HighDefinition.CameraSettings;
 
 public class SunBehaviour : MonoBehaviour
 {
     private Light _sunLight;
     private Light _areaLight;
+    private Volume _volume;
 
     private TimeManager _timeManager = new();
 
+    private int _currentHour = 0;
     private IPeriod _period = new Period { Duration = TimeSpan.FromSeconds(5) };
 
     private Vector2 _altitude;
@@ -15,39 +20,28 @@ public class SunBehaviour : MonoBehaviour
 
     private (TimeSpan A, TimeSpan B) _currentTimeRange;
 
-    private int _currentHour = 0;
-
-    private readonly (float timeOfDay, float intensity)[] intensity =
-    {
-        (0.00f, 0.5f),      // moon
-        (0.25f, 5000f),     // low sun
-        (0.54f, 100000f),   // 13:00 hight sun
-        (0.75f, 5000f),     // low sun
-        (1.00f, 0.5f)       // moon
-    };
-
     (TimeSpan timeOfDay, float azimuth, float altitude)[] _solarData = new[]
     {
         (new TimeSpan(00, 00, 0), 352.84f, -10.61f),
-        (new TimeSpan(01, 00, 0), 6.83f, -10.64f),
-        (new TimeSpan(02, 00, 0), 20.63f, -8.64f),
-        (new TimeSpan(03, 00, 0), 33.92f, -4.65f),
-        (new TimeSpan(04, 00, 0), 46.56f, +1.14f),
-        (new TimeSpan(05, 00, 0), 58.61f, +7.56f),
-        (new TimeSpan(06, 00, 0), 70.31f, +15.11f),
-        (new TimeSpan(07, 00, 0), 82.03f, +23.27f),
-        (new TimeSpan(08, 00, 0), 94.31f, +31.67f),
-        (new TimeSpan(09, 00, 0), 107.9f, 39.93f),
-        (new TimeSpan(10, 00, 0), 123.85f, 47.51f),
-        (new TimeSpan(11, 00, 0), 143.34f, 53.63f),
-        (new TimeSpan(12, 00, 0), 166.88f, 57.19f),
-        (new TimeSpan(13, 00, 0), 192.42f, 57.24f),
-        (new TimeSpan(14, 00, 0), 216.05f, 53.76f),
-        (new TimeSpan(15, 00, 0), 235.66f, 47.71f),
-        (new TimeSpan(16, 00, 0), 251.69f, 40.15f),
-        (new TimeSpan(17, 00, 0), 265.33f, 31.91f),
-        (new TimeSpan(18, 00, 0), 277.63f, 23.50f),
-        (new TimeSpan(19, 00, 0), 289.36f, 15.33f),
+        (new TimeSpan(01, 00, 0), 6.83f,   -10.64f),
+        (new TimeSpan(02, 00, 0), 20.63f,  -8.64f),
+        (new TimeSpan(03, 00, 0), 33.92f,  -4.65f),
+        (new TimeSpan(04, 00, 0), 46.56f,  +1.14f),
+        (new TimeSpan(05, 00, 0), 58.61f,  +7.56f),
+        (new TimeSpan(06, 00, 0), 70.31f,  +15.11f),
+        (new TimeSpan(07, 00, 0), 82.03f,  +23.27f),
+        (new TimeSpan(08, 00, 0), 94.31f,  +31.67f),
+        (new TimeSpan(09, 00, 0), 107.9f,  +39.93f),
+        (new TimeSpan(10, 00, 0), 123.85f, +47.51f),
+        (new TimeSpan(11, 00, 0), 143.34f, +53.63f),
+        (new TimeSpan(12, 00, 0), 166.88f, +57.19f),
+        (new TimeSpan(13, 00, 0), 192.42f, +57.24f),
+        (new TimeSpan(14, 00, 0), 216.05f, +53.76f),
+        (new TimeSpan(15, 00, 0), 235.66f, +47.71f),
+        (new TimeSpan(16, 00, 0), 251.69f, +40.15f),
+        (new TimeSpan(17, 00, 0), 265.33f, +31.91f),
+        (new TimeSpan(18, 00, 0), 277.63f, +23.50f),
+        (new TimeSpan(19, 00, 0), 289.36f, +15.33f),
         (new TimeSpan(20, 00, 0), 301.05f, +7.76f),
         (new TimeSpan(21, 00, 0), 313.09f, +1.29f),
         (new TimeSpan(22, 00, 0), 352.72f, -4.50f),
@@ -58,6 +52,7 @@ public class SunBehaviour : MonoBehaviour
     {
         _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
         _areaLight = GameObject.FindWithTag("AreaLight").GetComponent<Light>();
+        _volume = GameObject.FindWithTag("Volume").GetComponent<Volume>();
 
         InitFromCurrentHour(_currentHour);
     }
@@ -66,46 +61,32 @@ public class SunBehaviour : MonoBehaviour
     {
         float normalizedTime = _timeManager.GetNormalizedTime(_period);
 
-        float altitude = 0f, azimuth = 0f;
-        altitude = Mathf.LerpAngle(_altitude.x, _altitude.y, normalizedTime);
+        float altitude = CorrectAltitude(Mathf.LerpAngle(_altitude.x, _altitude.y, normalizedTime));
 
-        // левая стена обращена на север
-        // баню нужно повернуть +90f
-        // но чтобы не морочится с объёмами камерами делаем -90f
-        azimuth = Mathf.LerpAngle(_azimuth.x, _azimuth.y, normalizedTime) - 90f;
+        float azimuth = CorrectAzimuth(Mathf.LerpAngle(_azimuth.x, _azimuth.y, normalizedTime));
 
         transform.rotation = Quaternion.Euler(altitude, azimuth, 0f);
 
-        float normalizedTimeOfDay = (float)(
-            Lerp(_currentTimeRange.A, _currentTimeRange.B, normalizedTime).TotalSeconds /
-            TimeSpan.FromDays(1).TotalSeconds);
+        _sunLight.intensity = GetIntensity(altitude);
 
-        float intensity = GetIntensity(normalizedTimeOfDay);
+        float normalizedTimeOfDay = _timeManager.GetNormalizedTimeOfDay(normalizedTime, _currentTimeRange.A, _currentTimeRange.B);
 
-        if (altitude < 0)
-        {
-            sunLight.intensity = 0.5f;
-        }
-        else
-        {
-            sunLight.intensity = 100000f;
-        }
-
-        Debug.Log($"{(_currentHour % 24)} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2})");
+        Debug.Log($"{_currentHour % 24} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2})");
 
         CheckAndReset(normalizedTime);
     }
 
+
     private void InitFromCurrentHour(int currentHour)
     {
-        var A = Array.Find(_solarData, x => x.timeOfDay == new TimeSpan((currentHour % 24) + 0, 00, 00));
-        var B = Array.Find(_solarData, x => x.timeOfDay == new TimeSpan((currentHour % 24) + 1, 00, 00));
+        var a = Array.Find(_solarData, x => x.timeOfDay == new TimeSpan((currentHour % 24) + 0, 0, 0));
+        var b = Array.Find(_solarData, x => x.timeOfDay == new TimeSpan((currentHour % 24) + 1, 0, 0));
 
-        _currentTimeRange.A = A.timeOfDay;
-        _currentTimeRange.B = B.timeOfDay;
+        _currentTimeRange.A = a.timeOfDay;
+        _currentTimeRange.B = b.timeOfDay;
 
-        _altitude = new Vector2(A.altitude, B.altitude);
-        _azimuth = new Vector2(A.azimuth, B.azimuth);
+        _altitude = new Vector2(a.altitude, b.altitude);
+        _azimuth = new Vector2(a.azimuth, b.azimuth);
     }
 
     private void CheckAndReset(float normalizedTime)
@@ -117,44 +98,50 @@ public class SunBehaviour : MonoBehaviour
 
         _currentHour += 1;
 
-        _areaLight.enabled = (_currentHour < 4 || _currentHour > 22);
+        if (_currentHour < 3 || _currentHour > 22)
+        {
+            // ночь
+            if (_volume.profile.TryGet<Exposure>(out Exposure exposure))
+            {
+                exposure.mode.value = ExposureMode.Automatic;
+            }
+            _areaLight.enabled = true;
+        }
+        else
+        {
+            if (_volume.profile.TryGet<Exposure>(out Exposure exposure))
+            {
+                exposure.mode.value = ExposureMode.UsePhysicalCamera;
+            }
+            _areaLight.enabled = false;
+        }
 
         InitFromCurrentHour(_currentHour);
 
         _timeManager.Reset();
     }
 
-    public float GetIntensity(float timeOfDay)
+    public static float CorrectAltitude(float val)
     {
-        if (timeOfDay <= 0f) return 0f;
-        if (timeOfDay >= 1f) return 0f;
-
-        for (int i = 0; i < intensity.Length - 1; i++)
-        {
-            var t1 = intensity[i].timeOfDay;
-            var k1 = intensity[i].intensity;
-            var t2 = intensity[i + 1].timeOfDay;
-            var k2 = intensity[i + 1].intensity;
-
-            if (timeOfDay >= t1 && timeOfDay <= t2)
-            {
-                float ratio = (timeOfDay - t1) / (t2 - t1);
-                return Mathf.Lerp(k1, k2, ratio);
-            }
-        }
-        return 0f; // Fallback
+        return val;
     }
 
-    public static TimeSpan Lerp(TimeSpan start, TimeSpan end, float t)
+    public static float CorrectAzimuth(float val)
     {
-        // Преобразование TimeSpan в общее количество тиков (100-наносекундные интервалы)
-        long startTicks = start.Ticks;
-        long endTicks = end.Ticks;
+        // левая стена обращена на север
+        // баню нужно повернуть +90f
+        // но чтобы не морочится с объёмами камерами делаем -90f
+        return val - 90f;
 
-        // Линейная интерполяция тиков
-        long lerpedTicks = (long)(startTicks + (endTicks - startTicks) * t);
+    }
 
-        // Возврат нового TimeSpan
-        return new TimeSpan(lerpedTicks);
+    public static float GetIntensity(float altitude)
+    {
+        // в зените 58 должно быть 32
+        return altitude switch
+        {
+            < 0 => 0.5f,    // moon
+            _ => 100000f    // hight sun
+        };
     }
 }
