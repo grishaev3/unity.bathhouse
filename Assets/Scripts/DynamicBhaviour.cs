@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class DynamicBehaviour : MonoBehaviour
 {
-    [Header("Настройки древесины")]
+    [Header("Wood Density")]
+    public bool enableSimulation = false;
+
+    [Header("Wood Density")]
     public float woodDensity = 500f; // кг/м³ (сосна: 400-600)
 
     [Header("Solver Iterations")]
@@ -12,7 +15,6 @@ public class DynamicBehaviour : MonoBehaviour
 
     [Header("Solver Velocity Iterations")]
     public int SolverVelocityIterations = 8;
-
 
     [Header("Debug Info")]
     public bool debug = false;
@@ -91,6 +93,8 @@ public class DynamicBehaviour : MonoBehaviour
                 size = сollider.bounds.size;
                 mass = (woodDensity * size.x * size.y * size.z);
             }
+
+            if (!enableSimulation) return;
 
             Renderer renderer = child.GetComponent<Renderer>();
             if (child.GetComponent<Rigidbody>() == null && renderer != null)

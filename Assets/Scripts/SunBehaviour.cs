@@ -7,14 +7,13 @@ public class SunBehaviour : MonoBehaviour
 
     private TimeManager _timeManager = new();
 
-    private IPeriod _period = new Period { Duration = TimeSpan.FromSeconds(10) };
+    private IPeriod _period = new Period { Duration = TimeSpan.FromSeconds(5) };
 
     private Vector2 _altitude;
     private Vector2 _azimuth;
 
     private (TimeSpan A, TimeSpan B) _currentTimeRange;
 
-    private float _baseIntensity = 100000;
     private int _currentHour = 0;
 
     private readonly (float timeOfDay, float intensity)[] intensity =
@@ -67,18 +66,30 @@ public class SunBehaviour : MonoBehaviour
 
         float altitude = 0f, azimuth = 0f;
         altitude = Mathf.LerpAngle(_altitude.x, _altitude.y, normalizedTime);
-        azimuth = Mathf.LerpAngle(_azimuth.x, _azimuth.y, normalizedTime);
+
+        // левая стена обращена на север
+        // баню нужно повернуть +90f
+        // но чтобы не морочится с объёмами камерами делаем -90f
+        azimuth = Mathf.LerpAngle(_azimuth.x, _azimuth.y, normalizedTime) - 90f;
 
         transform.rotation = Quaternion.Euler(altitude, azimuth, 0f);
 
         float normalizedTimeOfDay = (float)(
-            Lerp(_currentTimeRange.A, _currentTimeRange.B, normalizedTime).TotalSeconds / 
+            Lerp(_currentTimeRange.A, _currentTimeRange.B, normalizedTime).TotalSeconds /
             TimeSpan.FromDays(1).TotalSeconds);
 
         float intensity = GetIntensity(normalizedTimeOfDay);
-        sunLight.intensity = intensity;
 
-        Debug.Log($"{(_currentHour % 24)} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2}) Koef:{intensity:F2}");
+        if (altitude < 0)
+        {
+            sunLight.intensity = 0.5f;
+        }
+        else
+        {
+            sunLight.intensity = 100000f;
+        }
+
+        Debug.Log($"{(_currentHour % 24)} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2}) intensity:{intensity:F2}");
 
         CheckAndReset(normalizedTime);
     }
