@@ -7,11 +7,17 @@ public class WorldBehaviour : MonoBehaviour
     [Header("Настройки FPS")]
     public int targetFPS = 60;
 
-    [Header("Настройки рестарта")]
-    public float fadeTime = 1f;
+    [Header("Симуляция физики")]
+    public bool physicsEnable = false;
 
-    [Header("UI (опционально)")]
-    public CanvasGroup fadePanel;
+    [Header("Секунд в часе")]
+    public int timeDuration = 10;
+
+    [Header("Час начала")]
+    public int hourStart = 0;
+
+    [Header("Час конца")]
+    public int hourEnd = 23;
 
     void Start()
     {
@@ -48,19 +54,8 @@ public class WorldBehaviour : MonoBehaviour
 
     private IEnumerator ResetWithFade()
     {
-        if (fadePanel != null)
-        {
-            // Fade out
-            float elapsed = 0f;
-            while (elapsed < fadeTime)
-            {
-                elapsed += Time.unscaledDeltaTime;
-                fadePanel.alpha = Mathf.Clamp01(elapsed / fadeTime);
-                yield return null;
-            }
-        }
-
-        // Жесткий сброс
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        yield return null;
     }
 }

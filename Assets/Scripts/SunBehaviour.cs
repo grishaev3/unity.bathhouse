@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class SunBehaviour : MonoBehaviour
 {
-    private Light sunLight;
+    private Light _sunLight;
+    private Light _areaLight;
 
     private TimeManager _timeManager = new();
 
@@ -14,7 +15,6 @@ public class SunBehaviour : MonoBehaviour
 
     private (TimeSpan A, TimeSpan B) _currentTimeRange;
 
-    private float _baseIntensity = 100000;
     private int _currentHour = 0;
 
     private readonly (float timeOfDay, float intensity)[] intensity =
@@ -56,7 +56,8 @@ public class SunBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        sunLight = FindFirstObjectByType<Light>();
+        _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
+        _areaLight = GameObject.FindWithTag("AreaLight").GetComponent<Light>();
 
         InitFromCurrentHour(_currentHour);
     }
@@ -76,9 +77,9 @@ public class SunBehaviour : MonoBehaviour
             TimeSpan.FromDays(1).TotalSeconds);
 
         float intensity = GetIntensity(normalizedTimeOfDay);
-        sunLight.intensity = intensity;
+        _sunLight.intensity = intensity;
 
-        Debug.Log($"{(_currentHour % 24)} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2}) Koef:{intensity:F2}");
+        Debug.Log($"{(_currentHour % 24)} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2})");
 
         CheckAndReset(normalizedTime);
     }
@@ -103,6 +104,8 @@ public class SunBehaviour : MonoBehaviour
         }
 
         _currentHour += 1;
+
+        _areaLight.enabled = (_currentHour < 4 || _currentHour > 22);
 
         InitFromCurrentHour(_currentHour);
 
