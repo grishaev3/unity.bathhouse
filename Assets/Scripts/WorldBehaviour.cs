@@ -16,9 +16,12 @@ public class WorldBehaviour : MonoBehaviour
     [Header("Час конца")]
     public int hourEnd = 23;
 
+
+    private Settings _settings = new();
+
     void Start()
     {
-        QualitySettings.vSyncCount = 1;
+        QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = targetFPS;
 
         Time.timeScale = 0.2f;
@@ -26,14 +29,9 @@ public class WorldBehaviour : MonoBehaviour
         // Fixed Timestep 0.02 => 0.01
         Time.fixedDeltaTime = 1 / 100f;
 
-    //    // Default Contact Offset: 0.01 → 0.001 (точнее контакты)
-    //    Physics.defaultContactOffset = 0.001f;
-
-    //    // Default Solver Iterations 6 => 20
-    //    Physics.defaultSolverIterations = 20;
-
-    //    // Default Solver Velocity Iterations 1 => 8
-    //    Physics.defaultSolverVelocityIterations = 8;
+        Physics.sleepThreshold = _settings.SleepThreshold;
+        Physics.defaultSolverIterations = _settings.DefaultSolverIterations;
+        Physics.defaultSolverVelocityIterations = _settings.DefaultSolverVelocityIterations;
     }
 
     void Update()

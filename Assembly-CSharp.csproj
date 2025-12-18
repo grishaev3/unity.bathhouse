@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Manager\TimeManager.cs" />
     <Compile Include="Assets\Scripts\Camera\LinearRandom.cs" />
+    <Compile Include="Assets\Scripts\Types\Settings.cs" />
     <Compile Include="Assets\Scripts\Camera\LinearBase.cs" />
     <Compile Include="Assets\Scripts\Utils\Utils.cs" />
     <Compile Include="Assets\Scripts\CameraBehaviour.cs" />

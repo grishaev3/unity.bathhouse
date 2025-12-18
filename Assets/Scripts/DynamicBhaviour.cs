@@ -13,13 +13,14 @@ public class DynamicBehaviour : MonoBehaviour
     [Header("Wood Density")]
     public float woodDensity = 500f; // кг/м³ (сосна: 400-600)
 
-    [Header("Solver Iterations")]
-    public int SolverIterations = 20;
 
-    [Header("Solver Velocity Iterations")]
-    public int SolverVelocityIterations = 8;
+    private Settings _settings = new();
+
+    private int _solverIterations;
+    private int _solverVelocityIterations;
 
     private PhysicsMaterial _physicsMaterial = null;
+
     private readonly Dictionary<string, List<Transform>> _joinOn = new();
     private bool IsMesh(Transform child) => child.name.ToLowerInvariant().Contains("mesh");
 
@@ -28,6 +29,9 @@ public class DynamicBehaviour : MonoBehaviour
         _physicsMaterial = CreateDefault();
 
         if (!enableSimulation) return;
+
+        _solverIterations = _settings.DefaultSolverIterations;
+        _solverVelocityIterations = _settings.DefaultSolverVelocityIterations;
 
         if (debug)
         {
@@ -103,8 +107,8 @@ public class DynamicBehaviour : MonoBehaviour
 
                 //rigidbody.mass = mass;
                 rigidbody.useGravity = true;
-                rigidbody.solverIterations = SolverIterations;
-                rigidbody.solverVelocityIterations = SolverVelocityIterations;
+                rigidbody.solverIterations = _solverIterations;
+                rigidbody.solverVelocityIterations = _solverVelocityIterations;
                 rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
                 //rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             }

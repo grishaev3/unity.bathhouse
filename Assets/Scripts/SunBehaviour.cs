@@ -67,7 +67,7 @@ public class SunBehaviour : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(altitude, azimuth, 0f);
 
-        Debug.Log($"{_timeManager.CurrentHour % 24} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2})");
+        //Debug.Log($"{_timeManager.CurrentHour % 24} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2})");
 
         if (_timeManager.IsPeriodEnded(normalizedTime))
         {
