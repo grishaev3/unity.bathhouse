@@ -2,18 +2,16 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
-using static UnityEngine.Rendering.HighDefinition.CameraSettings;
+using static TimeManager;
 
 public class SunBehaviour : MonoBehaviour
 {
     private Light _sunLight;
     private Light _areaLight;
-    private Volume _volume;
 
     private TimeManager _timeManager = new();
 
-    private int _currentHour = 0;
-    private IPeriod _period = new Period { Duration = TimeSpan.FromSeconds(5) };
+    private IPeriod _period = new Period { Duration = TimeSpan.FromSeconds(3) };
 
     private Vector2 _altitude;
     private Vector2 _azimuth;
@@ -50,16 +48,18 @@ public class SunBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        _sunLight = GameObject.FindWithTag("Sun").GetComponent<Light>();
-        _areaLight = GameObject.FindWithTag("AreaLight").GetComponent<Light>();
-        _volume = GameObject.FindWithTag("Volume").GetComponent<Volume>();
+        _sunLight = GetComponent<Light>("Sun");
 
-        InitFromCurrentHour(_currentHour);
+        _areaLight = GetComponent<Light>("AreaLight");
+
+        InitFromCurrentHour(_timeManager.CurrentHour);
     }
 
     void LateUpdate()
     {
-        float normalizedTime = _timeManager.GetNormalizedTime(_period);
+        _timeManager.UpdateNormalizedTime(_period, out float normalizedTime);
+
+        float normalizedTimeOfDay = _timeManager.GetNormalizedTimeOfDay(normalizedTime, _currentTimeRange.A, _currentTimeRange.B);
 
         float altitude = CorrectAltitude(Mathf.LerpAngle(_altitude.x, _altitude.y, normalizedTime));
 
@@ -67,15 +67,34 @@ public class SunBehaviour : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(altitude, azimuth, 0f);
 
-        _sunLight.intensity = GetIntensity(altitude);
+        Debug.Log($"{_timeManager.CurrentHour % 24} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2})");
 
-        float normalizedTimeOfDay = _timeManager.GetNormalizedTimeOfDay(normalizedTime, _currentTimeRange.A, _currentTimeRange.B);
+        if (_timeManager.IsPeriodEnded(normalizedTime))
+        {
+            InitFromCurrentHour(_timeManager.CurrentHour);
 
-        Debug.Log($"{_currentHour % 24} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2})");
-
-        CheckAndReset(normalizedTime);
+            SwitchLighting(altitude);
+        }
     }
 
+    private void SwitchLighting(float altitude)
+    {
+        //_volume.profile.TryGet(out Exposure exposure);
+        //exposure.mode.value = ExposureMode.UsePhysicalCamera;
+
+        switch (_timeManager.GetSunCircle(altitude))
+        {
+            case SunCircle.Night:
+                _sunLight.intensity = 100000f;
+                _areaLight.enabled = true;
+                break;
+
+            case SunCircle.Day:
+                _sunLight.intensity = 100000f;
+                _areaLight.enabled = false;
+                break;
+        }
+    }
 
     private void InitFromCurrentHour(int currentHour)
     {
@@ -89,59 +108,27 @@ public class SunBehaviour : MonoBehaviour
         _azimuth = new Vector2(a.azimuth, b.azimuth);
     }
 
-    private void CheckAndReset(float normalizedTime)
+    public static float CorrectAltitude(float altitude)
     {
-        if (normalizedTime < 0.999f)
-        {
-            return;
-        }
-
-        _currentHour += 1;
-
-        if (_currentHour < 3 || _currentHour > 22)
-        {
-            // ночь
-            if (_volume.profile.TryGet<Exposure>(out Exposure exposure))
-            {
-                exposure.mode.value = ExposureMode.Automatic;
-            }
-            _areaLight.enabled = true;
-        }
-        else
-        {
-            if (_volume.profile.TryGet<Exposure>(out Exposure exposure))
-            {
-                exposure.mode.value = ExposureMode.UsePhysicalCamera;
-            }
-            _areaLight.enabled = false;
-        }
-
-        InitFromCurrentHour(_currentHour);
-
-        _timeManager.Reset();
+        return altitude;
     }
 
-    public static float CorrectAltitude(float val)
-    {
-        return val;
-    }
-
-    public static float CorrectAzimuth(float val)
+    public static float CorrectAzimuth(float azimuth)
     {
         // левая стена обращена на север
         // баню нужно повернуть +90f
         // но чтобы не морочится с объёмами камерами делаем -90f
-        return val - 90f;
-
+        return azimuth - 90f;
     }
 
-    public static float GetIntensity(float altitude)
+    private T GetComponent<T>(string tag)
     {
-        // в зените 58 должно быть 32
-        return altitude switch
+        GameObject gameObject = GameObject.FindWithTag(tag);
+        if (gameObject.TryGetComponent<T>(out T component))
         {
-            < 0 => 0.5f,    // moon
-            _ => 100000f    // hight sun
-        };
+            return component;
+        }
+
+        return default;
     }
 }

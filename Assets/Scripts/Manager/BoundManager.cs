@@ -7,11 +7,6 @@ class BoundManager : IResetable
 {
     private int _currentBoundIndex = default;
 
-    public BoundManager()
-    {
-        
-    }
-
     private readonly (string name, float freq, Bounds bound)[] _bounds = new (string name, float freq, Bounds bound)[]
     {
         ("¬нутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f))),

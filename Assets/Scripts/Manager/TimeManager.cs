@@ -3,16 +3,28 @@ using UnityEngine;
 
 class TimeManager : IResetable
 {
-    private double _msCurrentTime = 0d;
+    internal enum SunCircle
+    {
+        Day,
+        Night
+    }
 
-    public float GetNormalizedTime(IPeriod model)
+    private double _msCurrentTime = 0d;
+    private double _normalizedTime = 0d;
+    private int _currentHour = 0;
+
+    public float NormalizedTime => (float)_normalizedTime;
+
+    public int CurrentHour => _currentHour;
+
+    public void UpdateNormalizedTime(IPeriod model, out float normalizedTime)
     {
         _msCurrentTime += Time.deltaTime * TimeSpan.FromSeconds(1).TotalMilliseconds;
 
         // учитываем что замедлили время 
-        double normalizedTime = _msCurrentTime / (model.Duration.TotalMilliseconds / (1d / Time.timeScale));
+        _normalizedTime = _msCurrentTime / (model.Duration.TotalMilliseconds / (1d / Time.timeScale));
 
-        return (float)normalizedTime;
+        normalizedTime = (float)_normalizedTime;
     }
 
     public float GetNormalizedTimeOfDay(float normalizedTime, TimeSpan a, TimeSpan b)
@@ -20,7 +32,30 @@ class TimeManager : IResetable
         return (float)(Lerp(a, b, normalizedTime).TotalSeconds / TimeSpan.FromDays(1).TotalSeconds);
     }
 
-    public static TimeSpan Lerp(TimeSpan start, TimeSpan end, float t)
+    public SunCircle GetSunCircle(float altitude)
+    {
+        return _currentHour switch
+        {
+            >= 5 and <= 19 => SunCircle.Day,
+            _ => SunCircle.Night
+        };
+    }
+
+    public bool IsPeriodEnded(float normalizedTime)
+    {
+        if (normalizedTime < 0.999f)
+        {
+            return false;
+        }
+
+        _currentHour += 1;
+
+        Reset();
+
+        return true;
+    }
+
+    private static TimeSpan Lerp(TimeSpan start, TimeSpan end, float t)
     {
         // Преобразование TimeSpan в общее количество тиков (100-наносекундные интервалы)
         long startTicks = start.Ticks;
@@ -37,6 +72,4 @@ class TimeManager : IResetable
     {
         _msCurrentTime = 0d;
     }
-
-    public double CurrentTime => _msCurrentTime;
 }

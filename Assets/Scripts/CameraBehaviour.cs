@@ -14,13 +14,15 @@ public class CameraBehaviour : MonoBehaviour
         _stateManager = new StateManager();
         _modelManager = new CameraModelManager(_boundManager.ActiveBound.bound);
 
-        CheckAndReset(float.MaxValue);
+        IsPeriodEnded(float.MaxValue);
     }
 
     void LateUpdate()
     {
         CameraBase model = _modelManager.ActiveModel;
-        float normalizedTime = _timeManager.GetNormalizedTime(model);
+
+        _timeManager.UpdateNormalizedTime(model, out float normalizedTime);
+
         Vector3 position = model.Func(normalizedTime, model);
 
         transform.position = position;
@@ -33,10 +35,10 @@ public class CameraBehaviour : MonoBehaviour
             transform.LookAt(new Vector3(0f, 0f, -2f));
         }
 
-        CheckAndReset(normalizedTime);
+        IsPeriodEnded(normalizedTime);
     }
 
-    private void CheckAndReset(float normalizedTime)
+    private void IsPeriodEnded(float normalizedTime)
     {
         if (normalizedTime < 0.999f)
         {
@@ -44,7 +46,7 @@ public class CameraBehaviour : MonoBehaviour
         }
 
         _timeManager.Reset();
-        _boundManager.Reset("Глобальный обём");
+        _boundManager.Reset();
         _stateManager.Reset();
 
         CameraBase model = _modelManager.ActiveModel;
