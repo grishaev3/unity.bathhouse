@@ -11,11 +11,18 @@ class TimeManager : IResetable
 
     private double _msCurrentTime = 0d;
     private double _normalizedTime = 0d;
-    private int _currentHour = 0;
+    private int _currentHour;
+
+    private Settings _settings = new();
 
     public float NormalizedTime => (float)_normalizedTime;
 
     public int CurrentHour => _currentHour;
+
+    public TimeManager()
+    {
+        _currentHour = _settings.HourStart;
+    }
 
     public void UpdateNormalizedTime(IPeriod model, out float normalizedTime)
     {
@@ -48,7 +55,14 @@ class TimeManager : IResetable
             return false;
         }
 
-        _currentHour += 1;
+        if ((_currentHour + 1) >= _settings.HourEnd)
+        {
+            _currentHour = _settings.HourStart;
+        }
+        else
+        {
+            _currentHour += 1;
+        }
 
         Reset();
 

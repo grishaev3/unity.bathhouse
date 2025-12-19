@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.HighDefinition;
 using static TimeManager;
 
 public class SunBehaviour : MonoBehaviour
@@ -10,8 +8,9 @@ public class SunBehaviour : MonoBehaviour
     private Light _areaLight;
 
     private TimeManager _timeManager = new();
+    private Settings _settings = new();
 
-    private IPeriod _period = new Period { Duration = TimeSpan.FromSeconds(3) };
+    private IPeriod _period;
 
     private Vector2 _altitude;
     private Vector2 _azimuth;
@@ -48,6 +47,8 @@ public class SunBehaviour : MonoBehaviour
 
     private void Awake()
     {
+        _period = new Period { Duration = _settings.SunPeriodDuration };
+
         _sunLight = GetComponent<Light>("Sun");
 
         _areaLight = GetComponent<Light>("AreaLight");
@@ -67,7 +68,7 @@ public class SunBehaviour : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(altitude, azimuth, 0f);
 
-        //Debug.Log($"{_timeManager.CurrentHour % 24} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2})");
+        Debug.Log($"{_timeManager.CurrentHour} {normalizedTimeOfDay:F2} vec2({altitude:F2}, {azimuth:F2})");
 
         if (_timeManager.IsPeriodEnded(normalizedTime))
         {
@@ -81,17 +82,18 @@ public class SunBehaviour : MonoBehaviour
     {
         //_volume.profile.TryGet(out Exposure exposure);
         //exposure.mode.value = ExposureMode.UsePhysicalCamera;
+        //_sunLight.intensity = 100000f;
 
         switch (_timeManager.GetSunCircle(altitude))
         {
             case SunCircle.Night:
-                _sunLight.intensity = 100000f;
                 _areaLight.enabled = true;
+                _areaLight.shadows = LightShadows.Soft;
                 break;
 
             case SunCircle.Day:
-                _sunLight.intensity = 100000f;
                 _areaLight.enabled = false;
+                _areaLight.shadows = LightShadows.None;
                 break;
         }
     }

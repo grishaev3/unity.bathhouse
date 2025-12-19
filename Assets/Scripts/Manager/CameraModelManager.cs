@@ -7,25 +7,28 @@ class CameraModelManager : IResetable
 {
     private int _currentModelIndex = default;
     private readonly List<CameraBase> _modes = null;
+    private readonly Settings _settings = new();
 
     public CameraModelManager(Bounds bound)
     {
+        TimeSpan duration = _settings.CameraModelDuration;
+
         _modes = new()
         {
             //new SphereModel { Duration = TimeSpan.FromSeconds(20), Func = Sphere, Name = "Sphere"},
             //new LinearRandom(TimeSpan.FromSeconds(10), Linear, "Random", bound),
 
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRightFront", bound),
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRightBack", bound),
+            new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRightFront", bound),
+            new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRightBack", bound),
 
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeftFront", bound),
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeftBack", bound),
+            new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeftFront", bound),
+            new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeftBack", bound),
 
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUpFront", bound),
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUpBack", bound),
+            new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUpFront", bound),
+            new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUpBack", bound),
 
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUpFront", bound),
-            new LinearBase(TimeSpan.FromSeconds(12), new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUpBack", bound),
+            new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUpFront", bound),
+            new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUpBack", bound),
         };
 
         for (int i = 0; i < _modes.Count; i++)

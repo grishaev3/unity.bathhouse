@@ -4,25 +4,12 @@ using UnityEngine.SceneManagement;
 
 public class WorldBehaviour : MonoBehaviour
 {
-    [Header("Настройки FPS")]
-    public int targetFPS = 60;
-
-    [Header("Секунд в часе")]
-    public int timeDuration = 10;
-
-    [Header("Час начала")]
-    public int hourStart = 0;
-
-    [Header("Час конца")]
-    public int hourEnd = 23;
-
-
     private Settings _settings = new();
 
     void Start()
     {
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = targetFPS;
+        QualitySettings.vSyncCount = _settings.SyncCount;
+        Application.targetFrameRate = _settings.TargetFPS;
 
         Time.timeScale = 0.2f;
 

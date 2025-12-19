@@ -2,13 +2,15 @@ using UnityEngine;
 
 public class CameraBehaviour : MonoBehaviour
 {
-    private TimeManager _timeManager = null;
-    private BoundManager _boundManager = null;
-    private StateManager _stateManager = null;
-    private CameraModelManager _modelManager = null;
+    private TimeManager _timeManager;
+    private BoundManager _boundManager;
+    private StateManager _stateManager;
+    private CameraModelManager _modelManager;
+    private Settings _settings;
 
     void Awake()
     {
+        _settings = new Settings();
         _timeManager = new TimeManager();
         _boundManager = new BoundManager();
         _stateManager = new StateManager();
@@ -46,7 +48,7 @@ public class CameraBehaviour : MonoBehaviour
         }
 
         _timeManager.Reset();
-        _boundManager.Reset();
+        _boundManager.Reset(_settings.VolumeName);
         _stateManager.Reset();
 
         CameraBase model = _modelManager.ActiveModel;
