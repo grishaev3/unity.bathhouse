@@ -1,3 +1,4 @@
+using Assets.Scripts.Types;
 using UnityEngine;
 
 public class CameraBehaviour : MonoBehaviour
@@ -10,7 +11,8 @@ public class CameraBehaviour : MonoBehaviour
 
     void Awake()
     {
-        _settings = new Settings();
+        _settings = SettingsManager.Current;
+
         _timeManager = new TimeManager();
         _boundManager = new BoundManager();
         _stateManager = new StateManager();

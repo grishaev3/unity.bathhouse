@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Types;
+using System;
 using UnityEngine;
 using static TimeManager;
 
@@ -8,7 +9,7 @@ public class SunBehaviour : MonoBehaviour
     private Light _areaLight;
 
     private TimeManager _timeManager = new();
-    private Settings _settings = new();
+    private Settings _settings = SettingsManager.Current;
 
     private IPeriod _period;
 
@@ -47,7 +48,7 @@ public class SunBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        _period = new Period { Duration = _settings.SunPeriodDuration };
+        _period = new Period { Duration = _settings.Timer.SunPeriodDuration };
 
         _sunLight = GetComponent<Light>("Sun");
 

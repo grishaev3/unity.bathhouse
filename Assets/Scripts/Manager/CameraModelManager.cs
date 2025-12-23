@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using Assets.Scripts;
+using Assets.Scripts.Types;
 using UnityEngine;
 
 class CameraModelManager : IResetable
 {
     private int _currentModelIndex = default;
     private readonly List<CameraBase> _modes = null;
-    private readonly Settings _settings = new();
+    private readonly Settings _settings = SettingsManager.Current;
 
     public CameraModelManager(Bounds bound)
     {
-        TimeSpan duration = _settings.CameraModelDuration;
+        TimeSpan duration = _settings.Timer.CameraModelDuration;
 
         _modes = new()
         {

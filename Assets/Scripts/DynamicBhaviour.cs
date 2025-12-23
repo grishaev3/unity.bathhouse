@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
-using Assets;
+﻿using Assets;
+using Assets.Scripts.Types;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DynamicBehaviour : MonoBehaviour
 {
-    [Header("Wood Density")]
-    public bool enableSimulation = false;
-
     [Header("Debug Info")]
     public bool debug = false;
 
     [Header("Wood Density")]
     public float woodDensity = 500f; // кг/м³ (сосна: 400-600)
 
-
-    private Settings _settings = new();
+    private Settings _settings = SettingsManager.Current;
 
     private int _solverIterations;
     private int _solverVelocityIterations;
@@ -28,10 +25,10 @@ public class DynamicBehaviour : MonoBehaviour
     {
         _physicsMaterial = CreateDefault();
 
-        if (!enableSimulation) return;
+        if (!_settings.Physics.EnableSimulation) return;
 
-        _solverIterations = _settings.DefaultSolverIterations;
-        _solverVelocityIterations = _settings.DefaultSolverVelocityIterations;
+        _solverIterations = _settings.Physics.DefaultSolverIterations;
+        _solverVelocityIterations = _settings.Physics.DefaultSolverVelocityIterations;
 
         if (debug)
         {
@@ -188,13 +185,13 @@ public class DynamicBehaviour : MonoBehaviour
         return GetParentGroupName(current.parent, int.MaxValue);
     }
 
-    private static PhysicsMaterial CreateDefault()
+    private PhysicsMaterial CreateDefault()
     {
         return new()
         {
-            dynamicFriction = 0.7f,
-            staticFriction = 0.8f,
-            bounciness = 0.05f,
+            dynamicFriction = _settings.Physics.DynamicFriction,
+            staticFriction = _settings.Physics.StaticFriction,
+            bounciness = _settings.Physics.Bounciness,
 
             frictionCombine = PhysicsMaterialCombine.Average,
             bounceCombine = PhysicsMaterialCombine.Average
