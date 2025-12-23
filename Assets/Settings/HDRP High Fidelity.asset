@@ -168,7 +168,7 @@ MonoBehaviour:
     dynamicResolutionSettings:
       enabled: 1
       useMipBias: 0
-      advancedUpscalersByPriority: 00
+      advancedUpscalersByPriority: 01
       DLSSPerfQualitySetting: 1
       DLSSInjectionPoint: 2
       TAAUInjectionPoint: 0
@@ -176,8 +176,8 @@ MonoBehaviour:
       defaultInjectionPoint: 2
       DLSSUseOptimalSettings: 0
       DLSSSharpness: 0
-      FSR2EnableSharpness: 0
-      FSR2Sharpness: 0
+      FSR2EnableSharpness: 1
+      FSR2Sharpness: 0.1
       FSR2UseOptimalSettings: 1
       FSR2QualitySetting: 0
       FSR2InjectionPoint: 0

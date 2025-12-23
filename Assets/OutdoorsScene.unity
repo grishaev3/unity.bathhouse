@@ -705,10 +705,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2689563ea3a098646803bac3b20f2352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorldBehaviour
-  targetFPS: 100
-  timeDuration: 10
-  hourStart: 0
-  hourEnd: 23
 --- !u!1 &1062516579
 GameObject:
   m_ObjectHideFlags: 0
@@ -770,7 +766,7 @@ Terrain:
   m_ShadowCastingMode: 2
   m_DrawHeightmap: 1
   m_DrawInstanced: 1
-  m_DrawTreesAndFoliage: 1
+  m_DrawTreesAndFoliage: 0
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
@@ -1039,15 +1035,15 @@ MonoBehaviour:
   hasPersistentHistory: 0
   screenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
   screenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
-  allowDeepLearningSuperSampling: 1
+  allowDeepLearningSuperSampling: 0
   deepLearningSuperSamplingUseCustomQualitySettings: 1
   deepLearningSuperSamplingQuality: 1
   deepLearningSuperSamplingUseCustomAttributes: 0
   deepLearningSuperSamplingUseOptimalSettings: 1
   deepLearningSuperSamplingSharpening: 0
-  allowFidelityFX2SuperResolution: 0
-  fidelityFX2SuperResolutionUseCustomQualitySettings: 0
-  fidelityFX2SuperResolutionQuality: 0
+  allowFidelityFX2SuperResolution: 1
+  fidelityFX2SuperResolutionUseCustomQualitySettings: 1
+  fidelityFX2SuperResolutionQuality: 1
   fidelityFX2SuperResolutionUseCustomAttributes: 0
   fidelityFX2SuperResolutionUseOptimalSettings: 1
   fidelityFX2SuperResolutionEnableSharpening: 0
