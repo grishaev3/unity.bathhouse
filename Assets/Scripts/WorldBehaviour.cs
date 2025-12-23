@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Types;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class WorldBehaviour : MonoBehaviour
 {
-    private Settings _settings = new();
+    private Settings _settings = SettingsManager.Current;
 
     void Start()
     {
@@ -16,9 +17,9 @@ public class WorldBehaviour : MonoBehaviour
         // Fixed Timestep 0.02 => 0.01
         Time.fixedDeltaTime = 1 / 100f;
 
-        Physics.sleepThreshold = _settings.SleepThreshold;
-        Physics.defaultSolverIterations = _settings.DefaultSolverIterations;
-        Physics.defaultSolverVelocityIterations = _settings.DefaultSolverVelocityIterations;
+        UnityEngine.Physics.sleepThreshold = _settings.Physics.SleepThreshold;
+        UnityEngine.Physics.defaultSolverIterations = _settings.Physics.DefaultSolverIterations;
+        UnityEngine.Physics.defaultSolverVelocityIterations = _settings.Physics.DefaultSolverVelocityIterations;
     }
 
     void Update()
