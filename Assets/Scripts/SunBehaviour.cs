@@ -46,7 +46,7 @@ public class SunBehaviour : MonoBehaviour
         (new TimeSpan(23, 00, 0), 338.99f, -8.57f)
     };
 
-    private void Awake()
+    void Start()
     {
         _period = new Period { Duration = _settings.Timer.SunPeriodDuration };
 

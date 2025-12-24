@@ -21,7 +21,7 @@ public class DynamicBehaviour : MonoBehaviour
     private readonly Dictionary<string, List<Transform>> _joinOn = new();
     private bool IsMesh(Transform child) => child.name.ToLowerInvariant().Contains("mesh");
 
-    void Awake()
+    void Start()
     {
         _physicsMaterial = CreateDefault();
 

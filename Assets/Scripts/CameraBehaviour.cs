@@ -9,7 +9,7 @@ public class CameraBehaviour : MonoBehaviour
     private CameraModelManager _modelManager;
     private Settings _settings;
 
-    void Awake()
+    void Start()
     {
         _settings = SettingsManager.Current;
 

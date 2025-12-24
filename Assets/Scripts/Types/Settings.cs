@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Types
 {
-    internal enum VendorQLevel
+    internal enum PresetLevel
     {
         Low,
         Medium,
@@ -48,50 +48,41 @@ namespace Assets.Scripts.Types
 
     class SettingsManager
     {
-        private static VendorQLevel _current = DetectVendor();
+        private static PresetLevel _current = PresetLevel.Low;
 
-        /// <summary>
-        ///  TODO
-        /// </summary>
-        /// <returns></returns>
-        public static VendorQLevel DetectVendor()
-        {
-            var vendor = SystemInfo.graphicsDeviceName;
-            if (vendor.Contains("AMD") || vendor.Contains("ATI"))
+        private static readonly Lazy<Dictionary<PresetLevel, Settings>> _settings
+            = new(() => new Dictionary<PresetLevel, Settings>
             {
-                return VendorQLevel.Low;
-            }
-            else if (vendor.Contains("3060"))
-            {
-                return VendorQLevel.Medium;
-            }
-            else
-            {
-                return VendorQLevel.Hight;
-            }
-        }
-
-        private static readonly Lazy<Dictionary<VendorQLevel, Settings>> _settings
-            = new(() => new Dictionary<VendorQLevel, Settings>
-            {
-                [VendorQLevel.Low] = new Settings
+                [PresetLevel.Low] = new Settings
                 {
                     TargetFPS = 40,
                     SyncCount = 1
                 },
-                [VendorQLevel.Medium] = new Settings
+                [PresetLevel.Medium] = new Settings
                 {
                     TargetFPS = 60,
                     SyncCount = 0
                 },
-                [VendorQLevel.Hight] = new Settings
+                [PresetLevel.Hight] = new Settings
                 {
                     TargetFPS = 100,
                     SyncCount = 0
                 }
             });
 
-        public static Settings Current =>
-            _settings.Value.TryGetValue(_current, out var settings) ? settings : throw new ArgumentException($"Неизвестный VendorType");
+        public static Settings Current
+        {
+            get
+            {
+                if (_settings.Value.TryGetValue(_current, out var settings) && settings != null)
+                {
+                    return settings;
+                }
+                else
+                {
+                    throw new ArgumentException($"Неизвестный VendorType");
+                }
+            }
+        }
     }
 }

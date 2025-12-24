@@ -3,11 +3,12 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[DefaultExecutionOrder(-1000)]
 public class WorldBehaviour : MonoBehaviour
 {
     private Settings _settings = SettingsManager.Current;
 
-    void Start()
+    void Awake()
     {
         QualitySettings.vSyncCount = _settings.SyncCount;
         Application.targetFrameRate = _settings.TargetFPS;
