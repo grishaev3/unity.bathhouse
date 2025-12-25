@@ -3,12 +3,19 @@ using UnityEngine;
 
 class LinearBase : CameraBase
 {
-    public LinearBase(TimeSpan duration, Vector3 direction, Func<float, CameraBase, Vector3> func, string name, Bounds bounds)
+    public LinearBase(
+        TimeSpan duration, 
+        Vector3 direction, 
+        Func<float, CameraBase, Vector3> func, 
+        string name, 
+        Bounds bounds)
     {
         _direction = direction;
 
+        _funcLookFrom = func;
+
         Duration = duration;
-        Func = func;
+
         Name = name;
 
         Reset(bounds);

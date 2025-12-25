@@ -23,21 +23,15 @@ public class CameraBehaviour : MonoBehaviour
 
     void LateUpdate()
     {
-        CameraBase model = _modelManager.ActiveModel;
+        CameraBase cameraModel = _modelManager.ActiveModel;
 
-        _timeManager.UpdateNormalizedTime(model, out float normalizedTime);
+        _timeManager.UpdateNormalizedTime(cameraModel, out float normalizedTime);
 
-        Vector3 position = model.Func(normalizedTime, model);
+        (Vector3 lookFrom, Vector3 lookAt) = cameraModel.Invoke(normalizedTime, cameraModel);
 
-        transform.position = position;
-        if (_stateManager.ActiveCameraMode)
-        {
-            transform.LookAt(new Vector3(position.x, position.y, -2f));
-        }
-        else
-        {
-            transform.LookAt(new Vector3(0f, 0f, -2f));
-        }
+        transform.position = lookFrom;
+        transform.LookAt(lookAt);
+        // TODO: if (_stateManager.ActiveCameraMode)
 
         IsPeriodEnded(normalizedTime);
     }
@@ -55,7 +49,7 @@ public class CameraBehaviour : MonoBehaviour
 
         CameraBase model = _modelManager.ActiveModel;
         (string name, Bounds bound) = _boundManager.ActiveBound;
-        Debug.Log($"_currentMode: {name}-{model.Name}-{_stateManager.ActiveCameraMode}");
+        //Debug.Log($"_currentMode: {name}-{model.Name}-{_stateManager.ActiveCameraMode}");
 
         _modelManager.Reset(bound);
     }

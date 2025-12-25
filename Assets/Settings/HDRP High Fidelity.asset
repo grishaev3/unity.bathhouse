@@ -173,26 +173,26 @@ MonoBehaviour:
       DLSSInjectionPoint: 2
       TAAUInjectionPoint: 0
       STPInjectionPoint: 0
-      defaultInjectionPoint: 2
+      defaultInjectionPoint: 0
       DLSSUseOptimalSettings: 0
       DLSSSharpness: 0
       FSR2EnableSharpness: 1
       FSR2Sharpness: 0.1
-      FSR2UseOptimalSettings: 1
+      FSR2UseOptimalSettings: 0
       FSR2QualitySetting: 0
       FSR2InjectionPoint: 0
-      fsrOverrideSharpness: 0
+      fsrOverrideSharpness: 1
       fsrSharpness: 0.92
       maxPercentage: 100
       minPercentage: 100
       dynResType: 1
       upsampleFilter: 3
       forceResolution: 1
-      forcedPercentage: 50
+      forcedPercentage: 66
       lowResTransparencyMinimumThreshold: 0
-      rayTracingHalfResThreshold: 50
+      rayTracingHalfResThreshold: 66
       lowResSSGIMinimumThreshold: 0
-      lowResVolumetricCloudsMinimumThreshold: 50
+      lowResVolumetricCloudsMinimumThreshold: 66
       enableDLSS: 0
     lowresTransparentSettings:
       enabled: 1

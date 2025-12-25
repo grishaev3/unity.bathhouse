@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets.Scripts.Types
 {
@@ -9,6 +8,12 @@ namespace Assets.Scripts.Types
         Low,
         Medium,
         Hight
+    }
+
+    internal enum CameraMode
+    {
+        Static = 0,
+        Dynamic = 1
     }
 
     internal class Physics
@@ -32,6 +37,11 @@ namespace Assets.Scripts.Types
         public TimeSpan SunPeriodDuration => TimeSpan.FromSeconds(3);
     }
 
+    internal class Camera
+    {
+        public CameraMode Mode = CameraMode.Static;
+    }
+
     class Settings
     {
         public Settings() { }
@@ -43,12 +53,14 @@ namespace Assets.Scripts.Types
 
         public Timer Timer { get; } = new Timer();
 
+        public Camera Camera { get; } = new Camera();
+
         public string VolumeName => "Глобальный обём";
     }
 
     class SettingsManager
     {
-        private static PresetLevel _current = PresetLevel.Low;
+        private static PresetLevel _current = PresetLevel.Medium;
 
         private static readonly Lazy<Dictionary<PresetLevel, Settings>> _settings
             = new(() => new Dictionary<PresetLevel, Settings>
@@ -56,7 +68,7 @@ namespace Assets.Scripts.Types
                 [PresetLevel.Low] = new Settings
                 {
                     TargetFPS = 40,
-                    SyncCount = 1
+                    SyncCount = 0
                 },
                 [PresetLevel.Medium] = new Settings
                 {

@@ -6,31 +6,51 @@ using UnityEngine;
 
 class CameraModelManager : IResetable
 {
-    private int _currentModelIndex = default;
-    private readonly List<CameraBase> _modes = null;
+    private int _currentModelIndex;
+    private readonly List<CameraBase> _modes;
     private readonly Settings _settings = SettingsManager.Current;
 
     public CameraModelManager(Bounds bound)
     {
         TimeSpan duration = _settings.Timer.CameraModelDuration;
 
-        _modes = new()
+        _modes = new List<CameraBase>();
+
+        switch (_settings.Camera.Mode)
         {
-            //new SphereModel { Duration = TimeSpan.FromSeconds(20), Func = Sphere, Name = "Sphere"},
-            //new LinearRandom(TimeSpan.FromSeconds(10), Linear, "Random", bound),
+            case CameraMode.Static:
+                _modes.Add(new StaticCamera(
+                    TimeSpan.FromSeconds(30),
+                    (_, _) => new Vector3(-0.63f, 1.97f, +6.00f),
+                    Sphere,
+                    "Static"
+                 ));
+                _currentModelIndex = default;
+                break;
 
-            new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRightFront", bound),
-            new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRightBack", bound),
+            case CameraMode.Dynamic:
+            default:
+                _modes.AddRange(new List<CameraBase>()
+                {
+                    new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRightFront", bound),
+                    new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRightBack", bound),
 
-            new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeftFront", bound),
-            new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeftBack", bound),
+                    new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeftFront", bound),
+                    new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeftBack", bound),
 
-            new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUpFront", bound),
-            new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUpBack", bound),
+                    new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUpFront", bound),
+                    new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUpBack", bound),
 
-            new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUpFront", bound),
-            new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUpBack", bound),
-        };
+                    new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUpFront", bound),
+                    new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUpBack", bound),
+
+                    new LinearRandom(duration, Linear, "Random", bound),
+                    //new SphereModel { Duration = TimeSpan.FromSeconds(20), Func = Sphere, Name = "Sphere"},
+                });
+
+                _currentModelIndex = UniqueRandom.Next(0, _modes.Count, _currentModelIndex);
+                break;
+        }
 
         for (int i = 0; i < _modes.Count; i++)
         {
@@ -42,9 +62,12 @@ class CameraModelManager : IResetable
 
     public void Reset(object @object)
     {
-        var bound = (Bounds) @object;
+        var bound = (Bounds)@object;
 
-        _currentModelIndex = UniqueRandom.Next(0, _modes.Count, _currentModelIndex);
+        if (_settings.Camera.Mode == CameraMode.Dynamic)
+        {
+            _currentModelIndex = UniqueRandom.Next(0, _modes.Count, _currentModelIndex);
+        }
 
         _modes.ForEach(x =>
         {
@@ -54,10 +77,17 @@ class CameraModelManager : IResetable
 
     public int Count => _modes.Count;
 
+    private Vector3 Linear(float normalizedTime, CameraBase model)
+    {
+        LinearBase linearBase = (model as LinearBase);
+
+        return Vector3.Lerp(linearBase.A, linearBase.B, normalizedTime);
+    }
+
     private Vector3 Sphere(float normalizedTime, CameraBase model)
     {
-        float radius = (model as SphereModel).Radius;
-        float height = (model as SphereModel).Height;
+        float radius = 6f;
+        float height = 0.5f;
 
         // Угол в радианах для кругового движения
         float angle = normalizedTime * Mathf.PI;
@@ -67,14 +97,8 @@ class CameraModelManager : IResetable
         float y = height + (radius * Mathf.Abs(Mathf.Sin(angle))); // Полусфера (верхняя)
         float z = radius * Mathf.Cos(angle);
 
+        Debug.Log($"{x} {y} {z}");
         return new Vector3(x, y, z);
-    }
-
-    private Vector3 Linear(float normalizedTime, CameraBase model)
-    {
-        LinearBase linearBase = (model as LinearBase);
-
-        return Vector3.Lerp(linearBase.A, linearBase.B, normalizedTime);
     }
 }
 

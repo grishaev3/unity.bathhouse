@@ -7,8 +7,10 @@ class LinearRandom : LinearBase
     public LinearRandom(TimeSpan duration, Func<float, CameraBase, Vector3> func, string name, Bounds bounds) :
         base(duration, Vector3.zero, func, name, bounds)
     {
+        _funcLookFrom = func;
+
         Duration = duration;
-        Func = func;
+        
         Name = name;
 
         Reset(bounds);
