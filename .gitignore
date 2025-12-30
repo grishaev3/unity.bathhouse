@@ -2,6 +2,9 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+/.c#/*/*/[Bb]in/
+/.c#/*/*/[Oo]bj/
+
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
