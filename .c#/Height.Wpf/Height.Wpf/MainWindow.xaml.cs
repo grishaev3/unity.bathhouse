@@ -11,16 +11,6 @@ namespace Height.Wpf
         {
             InitializeComponent();
 
-            Calculator calculator = new(
-                new System.Numerics.Vector2(-23.5f, 30f),
-                new System.Numerics.Vector2(11.5f, -20f),
-                1024);
-
-
-            var a = calculator.Calc(-23.5f, 30f);
-            var b = calculator.Calc(11.5f, -20f);
-            var c = calculator.Calc(0f, 0f);
-
             FocusManager.SetFocusedElement(this, this);
         }
 
@@ -32,6 +22,7 @@ namespace Height.Wpf
                 e.Handled = true;
             }
         }
+
         private void SaveGradientToBmp()
         {
             var bitmap = gradientRenderer.CreateBitmap();
