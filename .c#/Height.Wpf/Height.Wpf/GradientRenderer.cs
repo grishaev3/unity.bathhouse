@@ -11,17 +11,17 @@ namespace Height.Wpf
 
         private readonly Calculator _calculator;
 
-        private readonly int _textureLength = 1025;
+        private readonly int _textureLength = 1024;
 
         public GradientRenderer()
         {
             _calculator = new(_textureLength, new Vector2(-25f, +25f), new Vector2(+25f, -25f), 
             [
-                new(20f, +0.5f),
+                new(+20f, +0.0f), //new(+20f, +0.5f),
                 new(-0f, -0.4f),
                 new(-2f, -0.6f),
                 new(-4f, -0.8f),
-                new(-15f, -1.5f),
+                new(-15f, -1.0f),
             ]);
         }
 
@@ -47,9 +47,10 @@ namespace Height.Wpf
         public WriteableBitmap CreateBitmap()
         {
             if (_lastBitmap != null)
-                return _lastBitmap.Clone(); // Возвращаем копию для безопасности
+            {
+                return _lastBitmap.Clone();
+            }
 
-            // Fallback - пересоздаём если нужно
             return GenerateBitmap(_textureLength, _textureLength);
         }
 
@@ -60,7 +61,8 @@ namespace Height.Wpf
             {
                 for (int x = 0; x < width; x++)
                 {
-                    byte intensity = _calculator.GetColor(x, y);// ?? (byte)(y * 255 / (height - 1));
+                    //byte intensity = (byte)(y * 255 / (height - 1));
+                    byte intensity = 0;
 
                     int pixelIndex = (y * width + x) * 4;
                     pixels[pixelIndex + 0] = intensity;

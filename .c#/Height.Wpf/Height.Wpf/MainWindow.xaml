@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Height.Wpf" 
         WindowStartupLocation="CenterScreen"
-        Title="Algorithmic Gradient 1024x1024" 
-        Height="1024" 
-        Width="1024" 
+        Title="Algorithmic Gradient 1025x1025"
+        Height="1025" 
+        Width="1025" 
         ResizeMode="NoResize" 
         KeyDown="Window_KeyDown"
         WindowStyle="SingleBorderWindow">
@@ -15,5 +15,5 @@
     <local:GradientRenderer HorizontalAlignment="Stretch" 
                                 x:Name="gradientRenderer"
                                 VerticalAlignment="Stretch"
-                                Width="1024" Height="1024"/>
+                                Width="1025" Height="1025"/>
 </Window>

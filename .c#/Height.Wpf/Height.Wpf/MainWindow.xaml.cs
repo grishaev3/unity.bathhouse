@@ -32,7 +32,7 @@ namespace Height.Wpf
 
             using (var fileStream = File.Create(filePath))
             {
-                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                BmpBitmapEncoder encoder = new();
                 encoder.Frames.Add(BitmapFrame.Create(bitmap));
                 encoder.Save(fileStream);
             }
