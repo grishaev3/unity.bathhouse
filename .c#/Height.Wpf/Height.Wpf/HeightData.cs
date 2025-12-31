@@ -5,7 +5,5 @@
         public float UnityZ = unityZ;
 
         public float Height = height;
-
-        public byte C = 0;
     }
 }
