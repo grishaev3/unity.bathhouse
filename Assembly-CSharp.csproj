@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\CameraBehaviour.cs" />
     <Compile Include="Assets\Scripts\Manager\IResetable.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraBase.cs" />
+    <Compile Include="Assets\Scripts\Utils\OverlapChecker.cs" />
     <Compile Include="Assets\Scripts\Manager\CameraModelManager.cs" />
     <Compile Include="Assets\Scripts\Types\Triangle.cs" />
     <Compile Include="Assets\Scripts\Camera\SphereModel.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="Assets\Scripts\Utils\IO.cs" />
     <Compile Include="Assets\Scripts\Types\MeshData.cs" />
     <Compile Include="Assets\Scripts\SunBehaviour.cs" />
-    <Compile Include="Assets\Scripts\Types\OverlapChecker.cs" />
     <Compile Include="Assets\Scripts\Manager\StateManager.cs" />
     <Compile Include="Assets\Scripts\Camera\StaticCamera.cs" />
     <Compile Include="Assets\Scripts\WorldBehaviour.cs" />

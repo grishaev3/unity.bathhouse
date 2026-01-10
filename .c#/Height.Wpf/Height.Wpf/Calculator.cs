@@ -4,16 +4,19 @@ namespace Height.Wpf
 {
     public class Calculator
     {
-        private int _textureLength;
+        private readonly int _textureLength;
 
         private readonly Vector2 _terrainTopLeft;
         private readonly Vector2 _terrainBottomRight;
         private readonly HeightData[] _heightData;
 
-        private readonly float _unitysizeZ, _unitysizeX;
+        private readonly float _unitysizeX, _unitysizeZ;
         private readonly float _minHeight, _maxHeight;
 
-        public Calculator(int textureLength, Vector2 terrainTopLeft, Vector2 terrainBottomRight, HeightData[] heightData)
+        private readonly SimpleNoise _noise;
+
+        public Calculator(int textureLength, Vector2 terrainTopLeft,
+            Vector2 terrainBottomRight, HeightData[] heightData, int perlinSeed)
         {
             _textureLength = textureLength;
 
@@ -27,45 +30,54 @@ namespace Height.Wpf
 
             _minHeight = heightData.Min(x => x.Height);
             _maxHeight = heightData.Max(x => x.Height);
+
+            _noise = new SimpleNoise(_unitysizeX, _unitysizeZ, _textureLength, perlinSeed);
         }
 
-        public byte GetColor(int x, int y)
+        public byte GetColor(int tx, int ty)
         {
-            y = _textureLength - y; // Переворачиваем по Y
+            ty = _textureLength - ty; // Переворачиваем по Y
 
-            var (_, unityZ) = Calc(x, y);
+            var (unityX, unityZ) = Calc(tx, ty);
 
-            var normalizeHeight = GetNormalizeHeight(unityZ);
+            var normalizeHeight = GetNormalizeHeight(unityX, unityZ);
 
-            var result = (byte)Math.Floor(normalizeHeight * 255f);
+            var result = (byte)Math.Floor(normalizeHeight * byte.MaxValue);
 
             return result;
         }
 
-        public float GatAbsoluteHeight(float unityZ)
+        private (float UnityX, float UnityZ) Calc(int x, int y)
         {
-            var (_heightDataA, _heightDataB) = FindByZ(unityZ);
-
-            var currentHeight = GetHeightByZ(unityZ, _heightDataA, _heightDataB);
-            return currentHeight;
+            return
+            (
+                UnityX: _terrainTopLeft.X + ((float)x / _textureLength) * _unitysizeX,
+                UnityZ: _terrainTopLeft.Y - ((float)y / _textureLength) * _unitysizeZ
+            );
         }
 
-        public float GetNormalizeHeight(float unityZ)
+        private float GetNormalizeHeight(float unityX, float unityZ)
         {
-            float currentHeight = GatAbsoluteHeight(unityZ);
+            float currentHeight = GetAbsoluteHeight(unityX, unityZ);
 
             var normalizeHeight = Interpolate(_minHeight, _maxHeight, currentHeight);
 
             return normalizeHeight;
         }
 
-        private (float unityX, float unityZ) Calc(int x, int y)
+        private float GetAbsoluteHeight(float unityX, float unityZ)
         {
-            return
-            (
-                _terrainTopLeft.X + ((float)x / _textureLength) * _unitysizeX,
-                _terrainTopLeft.Y - ((float)y / _textureLength) * _unitysizeZ
-            );
+            float baseHeight = 0f;
+
+            (HeightData a, HeightData b) = FindByZ(unityZ);
+
+            baseHeight = GetHeightByZ(unityZ, a, b);
+
+            float noiseValue = _noise.GetNoise(unityX, unityZ);
+            float noiseOffset = 0f;
+            //float noiseOffset = (noiseValue - 0.5f) * 0.08f; // ±0.04
+
+            return baseHeight + noiseOffset;
         }
 
         private (HeightData a, HeightData b) FindByZ(float unityZ)
@@ -95,7 +107,7 @@ namespace Height.Wpf
 
         private static float Interpolate(float a, float b, float c)
         {
-            if (a == b) return 0f; // Избегаем деления на ноль
+            if (Math.Abs(b - a) < float.Epsilon) return 0f;
             return (c - a) / (b - a);
         }
 

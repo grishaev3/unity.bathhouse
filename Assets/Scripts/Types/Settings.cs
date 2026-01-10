@@ -30,11 +30,11 @@ namespace Assets.Scripts.Types
 
     internal class Timer
     {
-        public int HourStart = 3;
+        public int HourStart = 0;
         public int HourEnd = 23;
 
         public TimeSpan CameraModelDuration => TimeSpan.FromSeconds(20);
-        public TimeSpan SunPeriodDuration => TimeSpan.FromSeconds(3);
+        public TimeSpan SunPeriodDuration => TimeSpan.FromSeconds(5);
     }
 
     internal class Camera
@@ -60,7 +60,7 @@ namespace Assets.Scripts.Types
 
     class SettingsManager
     {
-        private static PresetLevel _current = PresetLevel.Medium;
+        private static PresetLevel _current = PresetLevel.Low;
 
         private static readonly Lazy<Dictionary<PresetLevel, Settings>> _settings
             = new(() => new Dictionary<PresetLevel, Settings>
