@@ -1,9 +1,15 @@
 ﻿namespace Height.Wpf
 {
-    public struct HeightData(float unityZ, float height)
+    public struct HeightData
     {
-        public float UnityZ = unityZ;
+        public float UnityZ;
 
-        public float Height = height;
+        public float Height;
+
+        public HeightData(float unityZ, float height)
+        {
+            UnityZ = unityZ;
+            Height = height;
+        }
     }
 }

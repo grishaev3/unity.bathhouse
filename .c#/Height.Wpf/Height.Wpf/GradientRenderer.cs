@@ -17,8 +17,8 @@ namespace Height.Wpf
 
         public GradientRenderer()
         {
-            HeightData[] heightData = [
-                new(-25.00f, -1.5f),       
+            HeightData[] heightData = new HeightData[] {
+                new(-25.00f, -1.5f),
                 new(-15.50f, -1.2f),   // низ к 3уч
                 new(-4.00f, -0.8f),
                 new(-2.00f, -0.6f),
@@ -26,8 +26,8 @@ namespace Height.Wpf
                 new(+5.00f, -0.0f),
                 new(+18.5f, -0.25f),     // верх к 2уч
                 new(+23.1f, +0.50f),     // верх к 3уч
-                new(+25.0f, +0.50f),
-            ];
+                new(+25.0f, +0.50f)
+            };
 
             _calculator = new(_textureLength, 
                 new Vector2(-25f, +25f), 
