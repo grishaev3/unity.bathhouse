@@ -57,7 +57,7 @@ public class SunBehaviour : MonoBehaviour
         InitFromCurrentHour(_timeManager.CurrentHour);
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         _timeManager.UpdateNormalizedTime(_period, out float normalizedTime);
 
