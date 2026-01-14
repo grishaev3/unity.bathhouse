@@ -60,7 +60,7 @@ namespace Assets.Scripts.Types
 
     class SettingsManager
     {
-        private static PresetLevel _current = PresetLevel.Low;
+        private static PresetLevel _current = PresetLevel.Medium;
 
         private static readonly Lazy<Dictionary<PresetLevel, Settings>> _settings
             = new(() => new Dictionary<PresetLevel, Settings>
