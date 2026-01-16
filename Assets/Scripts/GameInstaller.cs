@@ -7,24 +7,26 @@ public class GameInstaller : MonoInstaller
     public override void InstallBindings()
     {
 
-        Container.Bind<BoundManager>().AsSingle();
-        Container.Bind<StateManager>().AsSingle();
-        Container.Bind<TimeManager>().AsTransient();
+        Container.Bind<BoundManager>().AsSingle().NonLazy();
+        Container.Bind<StateManager>().AsSingle().NonLazy();
+        Container.Bind<TimeManager>().FromMethod((context) =>
+        {
+            var settings = context.Container.Resolve<Settings>();
+            return new TimeManager(settings);
+        }).AsTransient().NonLazy();
 
         Container.Bind<CameraModelManager>().FromMethod((context) =>
         {
             var boundManager = context.Container.Resolve<BoundManager>();
-            return new CameraModelManager(boundManager.ActiveBound.bound);
-        }).AsSingle();
+            var settings = context.Container.Resolve<Settings>();
+            return new CameraModelManager(boundManager.ActiveBound.bound, settings);
+        }).AsSingle().NonLazy();
 
-        Container.Bind<SettingsManager>().AsSingle().WithArguments(PresetLevel.Low);
+        Container.Bind<SettingsManager>().AsSingle().WithArguments(PresetLevel.Low).NonLazy();
         Container.Bind<Settings>().FromMethod((context) =>
         {
             var settingsManager = context.Container.Resolve<SettingsManager>();
             return settingsManager.Current;
-        }).AsSingle();
-
-
-        var ss = Container.Resolve<Settings>();
+        }).AsSingle().NonLazy();
     }
 }

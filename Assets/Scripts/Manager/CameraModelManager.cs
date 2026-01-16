@@ -9,10 +9,11 @@ class CameraModelManager : IResetable
 {
     private int _currentModelIndex;
     private readonly List<CameraBase> _modes;
-    [Inject] private readonly Settings _settings;
+    private readonly Settings _settings;
 
-    public CameraModelManager(Bounds bound)
+    public CameraModelManager(Bounds bound, Settings settings)
     {
+        _settings = settings;
         TimeSpan duration = _settings.Timer.CameraModelDuration;
 
         _modes = new List<CameraBase>();

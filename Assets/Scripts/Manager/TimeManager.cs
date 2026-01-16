@@ -1,7 +1,6 @@
-using Assets.Scripts.Types;
 using System;
+using Assets.Scripts.Types;
 using UnityEngine;
-using Zenject;
 
 class TimeManager : IResetable
 {
@@ -15,14 +14,16 @@ class TimeManager : IResetable
     private double _normalizedTime = 0d;
     private int _currentHour;
 
-    [Inject] private readonly Settings _settings;
+    private readonly Settings _settings;
 
     public float NormalizedTime => (float)_normalizedTime;
 
     public int CurrentHour => _currentHour;
 
-    public TimeManager()
+    
+    public TimeManager(Settings settings)
     {
+        _settings = settings;
         _currentHour = _settings.Timer.HourStart;
     }
 

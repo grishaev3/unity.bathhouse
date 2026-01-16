@@ -171,19 +171,19 @@ MonoBehaviour:
       useMipBias: 1
       advancedUpscalersByPriority: 0100
       advancedUpscalerNames:
-      - FSR2
-      DLSSPerfQualitySetting: 3
-      DLSSInjectionPoint: 2
-      TAAUInjectionPoint: 0
+      - DLSS
+      DLSSPerfQualitySetting: 0
+      DLSSInjectionPoint: 0
+      TAAUInjectionPoint: 2
       STPInjectionPoint: 0
-      defaultInjectionPoint: 0
+      defaultInjectionPoint: 2
       DLSSUseOptimalSettings: 1
       DLSSSharpness: 0
-      DLSSRenderPresetForQuality: 0
-      DLSSRenderPresetForBalanced: 0
-      DLSSRenderPresetForPerformance: 0
-      DLSSRenderPresetForUltraPerformance: 0
-      DLSSRenderPresetForDLAA: 0
+      DLSSRenderPresetForQuality: 4
+      DLSSRenderPresetForBalanced: 4
+      DLSSRenderPresetForPerformance: 4
+      DLSSRenderPresetForUltraPerformance: 4
+      DLSSRenderPresetForDLAA: 4
       FSR2EnableSharpness: 1
       FSR2Sharpness: 0.1
       FSR2UseOptimalSettings: 0
@@ -194,8 +194,8 @@ MonoBehaviour:
       maxPercentage: 100
       minPercentage: 50
       dynResType: 1
-      upsampleFilter: 1
-      forceResolution: 1
+      upsampleFilter: 3
+      forceResolution: 0
       forcedPercentage: 25
       lowResTransparencyMinimumThreshold: 0
       rayTracingHalfResThreshold: 25
