@@ -2,6 +2,7 @@
 using Assets.Scripts.Types;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class DynamicBehaviour : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class DynamicBehaviour : MonoBehaviour
     [Header("Wood Density")]
     public float woodDensity = 500f; // кг/м³ (сосна: 400-600)
 
-    private Settings _settings = SettingsManager.Current;
+    [Inject] private readonly Settings _settings;
 
     private int _solverIterations;
     private int _solverVelocityIterations;

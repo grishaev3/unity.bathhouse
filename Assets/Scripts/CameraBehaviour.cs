@@ -1,23 +1,17 @@
 using Assets.Scripts.Types;
 using UnityEngine;
+using Zenject;
 
 public class CameraBehaviour : MonoBehaviour
 {
-    private TimeManager _timeManager;
-    private BoundManager _boundManager;
-    private StateManager _stateManager;
-    private CameraModelManager _modelManager;
-    private Settings _settings;
+    [Inject] private readonly TimeManager _timeManager;
+    [Inject] private readonly BoundManager _boundManager;
+    [Inject] private readonly StateManager _stateManager;
+    [Inject] private readonly CameraModelManager _modelManager;
+    [Inject] private readonly Settings _settings;
 
     void Start()
     {
-        _settings = SettingsManager.Current;
-
-        _timeManager = new TimeManager();
-        _boundManager = new BoundManager();
-        _stateManager = new StateManager();
-        _modelManager = new CameraModelManager(_boundManager.ActiveBound.bound);
-
         IsPeriodEnded(float.MaxValue);
     }
 

@@ -51,6 +51,7 @@ MonoBehaviour:
     supportTransparentDepthPrepass: 1
     supportTransparentDepthPostpass: 1
     colorBufferFormat: 74
+    depthBufferFormat: 0
     supportCustomPass: 1
     supportVariableRateShading: 1
     customBufferFormat: 12
@@ -167,32 +168,39 @@ MonoBehaviour:
       bufferFormat: 74
     dynamicResolutionSettings:
       enabled: 1
-      useMipBias: 0
-      advancedUpscalersByPriority: 00
+      useMipBias: 1
+      advancedUpscalersByPriority: 0100
+      advancedUpscalerNames:
+      - FSR2
       DLSSPerfQualitySetting: 3
       DLSSInjectionPoint: 2
       TAAUInjectionPoint: 0
       STPInjectionPoint: 0
-      defaultInjectionPoint: 2
+      defaultInjectionPoint: 0
       DLSSUseOptimalSettings: 1
       DLSSSharpness: 0
-      FSR2EnableSharpness: 0
+      DLSSRenderPresetForQuality: 0
+      DLSSRenderPresetForBalanced: 0
+      DLSSRenderPresetForPerformance: 0
+      DLSSRenderPresetForUltraPerformance: 0
+      DLSSRenderPresetForDLAA: 0
+      FSR2EnableSharpness: 1
       FSR2Sharpness: 0.1
       FSR2UseOptimalSettings: 0
-      FSR2QualitySetting: 0
-      FSR2InjectionPoint: 0
-      fsrOverrideSharpness: 1
-      fsrSharpness: 0.92
+      FSR2QualitySetting: 3
+      FSR2InjectionPoint: 2
+      fsrOverrideSharpness: 0
+      fsrSharpness: 0.8
       maxPercentage: 100
-      minPercentage: 100
+      minPercentage: 50
       dynResType: 1
-      upsampleFilter: 3
-      forceResolution: 0
-      forcedPercentage: 80
+      upsampleFilter: 1
+      forceResolution: 1
+      forcedPercentage: 25
       lowResTransparencyMinimumThreshold: 0
-      rayTracingHalfResThreshold: 66
+      rayTracingHalfResThreshold: 25
       lowResSSGIMinimumThreshold: 0
-      lowResVolumetricCloudsMinimumThreshold: 66
+      lowResVolumetricCloudsMinimumThreshold: 25
       enableDLSS: 0
     lowresTransparentSettings:
       enabled: 1
@@ -353,7 +361,7 @@ MonoBehaviour:
   m_CompositorCustomVolumeComponentsList:
     m_InjectionPoint: 1
     m_CustomPostProcessTypesAsString: []
-  m_Version: 25
+  m_Version: 26
   m_ObsoleteFrameSettings:
     overrides: 0
     enableShadow: 0

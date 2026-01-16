@@ -1,14 +1,15 @@
-using System;
-using System.Collections.Generic;
 using Assets.Scripts;
 using Assets.Scripts.Types;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 class CameraModelManager : IResetable
 {
     private int _currentModelIndex;
     private readonly List<CameraBase> _modes;
-    private readonly Settings _settings = SettingsManager.Current;
+    [Inject] private readonly Settings _settings;
 
     public CameraModelManager(Bounds bound)
     {

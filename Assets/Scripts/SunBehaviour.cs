@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Types;
 using System;
 using UnityEngine;
+using Zenject;
 using static TimeManager;
 
 public class SunBehaviour : MonoBehaviour
@@ -8,8 +9,8 @@ public class SunBehaviour : MonoBehaviour
     private Light _sunLight;
     private Light _areaLight;
 
-    private TimeManager _timeManager = new();
-    private Settings _settings = SettingsManager.Current;
+    [Inject] private readonly TimeManager _timeManager;
+    [Inject] private readonly Settings _settings;
 
     private IPeriod _period;
 

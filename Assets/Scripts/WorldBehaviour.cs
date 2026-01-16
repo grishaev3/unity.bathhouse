@@ -2,11 +2,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 [DefaultExecutionOrder(-1000)]
 public class WorldBehaviour : MonoBehaviour
 {
-    private Settings _settings = SettingsManager.Current;
+    [Inject] private readonly Settings _settings;
 
     void Awake()
     {

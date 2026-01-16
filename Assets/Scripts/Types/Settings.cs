@@ -44,8 +44,6 @@ namespace Assets.Scripts.Types
 
     class Settings
     {
-        public Settings() { }
-
         public int TargetFPS { get; set; }
         public int SyncCount { get; set; }
 
@@ -60,10 +58,15 @@ namespace Assets.Scripts.Types
 
     class SettingsManager
     {
-        private static PresetLevel _current = PresetLevel.Medium;
+        private PresetLevel _current;
 
-        private static readonly Lazy<Dictionary<PresetLevel, Settings>> _settings
-            = new(() => new Dictionary<PresetLevel, Settings>
+        public SettingsManager(PresetLevel presetLevel)
+        {
+            _current = presetLevel;
+        }
+
+        private static readonly Dictionary<PresetLevel, Settings> _settings
+            = new()
             {
                 [PresetLevel.Low] = new Settings
                 {
@@ -80,13 +83,13 @@ namespace Assets.Scripts.Types
                     TargetFPS = 100,
                     SyncCount = 0
                 }
-            });
+            };
 
-        public static Settings Current
+        public Settings Current
         {
             get
             {
-                if (_settings.Value.TryGetValue(_current, out var settings) && settings != null)
+                if (_settings.TryGetValue(_current, out var settings) && settings != null)
                 {
                     return settings;
                 }
