@@ -46,7 +46,7 @@ class TimeManager : IResetable
     {
         return _currentHour switch
         {
-            >= 5 and <= 19 => SunCircle.Day,
+            >= 4 and <= 20 => SunCircle.Day,
             _ => SunCircle.Night
         };
     }

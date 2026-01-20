@@ -35,6 +35,9 @@ namespace Assets.Scripts.Types
 
         public TimeSpan CameraModelDuration => TimeSpan.FromSeconds(20);
         public TimeSpan SunPeriodDuration => TimeSpan.FromSeconds(3);
+        public TimeSpan DawnSunPeriodDuration => TimeSpan.FromSeconds(18);
+        public TimeSpan DuskSunPeriodDuration => TimeSpan.FromSeconds(12);
+        
     }
 
     internal class Camera
