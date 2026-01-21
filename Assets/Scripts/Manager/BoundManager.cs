@@ -9,11 +9,13 @@ class BoundManager : IResetable
 
     private readonly (string name, float freq, Bounds bound)[] _bounds = new (string name, float freq, Bounds bound)[]
     {
-        ("Внутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f))),
+        //("Внутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f))),
 
-        ("Внутри дома 2-ой эт.", 0.2f, FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f))),
+        //("Внутри дома 2-ой эт.", 0.2f, FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f))),
 
         ("Глобальный обём", 0.8f, FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f))),
+
+        ("Забор левая сторона", 0.8f, FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f))),
     };
 
     public (string name, Bounds bound) ActiveBound
@@ -26,12 +28,26 @@ class BoundManager : IResetable
 
     public void Reset(object o = null)
     {
-        _currentBoundIndex = o != null ? 
-            Array.FindIndex(_bounds, x => x.name == (string)o) : 
-            UniqueRandom.Next(0, _bounds.Count(), _currentBoundIndex);
+        if (o != null)
+        {
+            _currentBoundIndex = Array.FindIndex(_bounds, x => x.name == (string)o);
+        }
+        else
+        {
+            _currentBoundIndex = UniqueRandom.Next(0, _bounds.Count(), _currentBoundIndex);
+        }
     }
 
-    public int Count => _bounds.Length;
+    private static Bounds FromMinMax(Vector3 min, Vector3 max)
+    {
+        Bounds bounds = new()
+        {
+            min = min,
+            max = max
+        };
+
+        return bounds;
+    }
 
     private static Bounds FromZero(Vector3 center, Vector3 size)
     {

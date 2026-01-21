@@ -3,7 +3,6 @@ using Assets.Scripts.Types;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 class CameraModelManager : IResetable
 {
@@ -18,46 +17,40 @@ class CameraModelManager : IResetable
 
         _modes = new List<CameraBase>();
 
-        switch (_settings.Camera.Mode)
+        if (_settings.Camera.Mode.HasFlag(CameraMode.Dynamic))
         {
-            case CameraMode.Static:
-                _modes.Add(new StaticCamera(
-                    TimeSpan.FromSeconds(30),
-                    (_, _) => new Vector3(-0.63f, 1.97f, +6.00f),
-                    Sphere,
-                    "Static"
-                 ));
-                _currentModelIndex = default;
-                break;
+            _modes.AddRange(new List<CameraBase>()
+            {
+                new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRightFront", bound),
+                new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRightBack", bound),
 
-            case CameraMode.Dynamic:
-            default:
-                _modes.AddRange(new List<CameraBase>()
-                {
-                    new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRightFront", bound),
-                    new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRightBack", bound),
+                new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeftFront", bound),
+                new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeftBack", bound),
 
-                    new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeftFront", bound),
-                    new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeftBack", bound),
+                new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUpFront", bound),
+                new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUpBack", bound),
 
-                    new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUpFront", bound),
-                    new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUpBack", bound),
+                new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUpFront", bound),
+                new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUpBack", bound),
 
-                    new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUpFront", bound),
-                    new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUpBack", bound),
+                new LinearRandom(duration, Linear, "Random", bound),
+            });
+        }
 
-                    new LinearRandom(duration, Linear, "Random", bound),
-                    //new SphereModel { Duration = TimeSpan.FromSeconds(20), Func = Sphere, Name = "Sphere"},
-                });
-
-                _currentModelIndex = UniqueRandom.Next(0, _modes.Count, _currentModelIndex);
-                break;
+        if (_settings.Camera.Mode.HasFlag(CameraMode.Static))
+        {
+            _modes.AddRange(new List<CameraBase>() {
+                new StaticCamera(duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
+                new StaticCamera(duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(+5f, 1.97f, 0f), new Vector3(-5f, 1.97f, 0f), "Static1")
+            });
         }
 
         for (int i = 0; i < _modes.Count; i++)
         {
             _modes[i].Index = i;
         }
+
+        _currentModelIndex = UniqueRandom.Next(0, _modes.Count, _currentModelIndex);
     }
 
     public CameraBase ActiveModel => _modes.Find(x => x.Index == _currentModelIndex);
@@ -81,9 +74,12 @@ class CameraModelManager : IResetable
 
     private Vector3 Linear(float normalizedTime, CameraBase model)
     {
-        LinearBase linearBase = (model as LinearBase);
-
-        return Vector3.Lerp(linearBase.A, linearBase.B, normalizedTime);
+        return model switch
+        {
+            LinearBase o => Vector3.Lerp(o.A, o.B, normalizedTime),
+            StaticCamera o => Vector3.Lerp(o.A, o.B, normalizedTime),
+            _ => Vector3.zero  // или throw ArgumentException для безопасности
+        };
     }
 
     private Vector3 Sphere(float normalizedTime, CameraBase model)

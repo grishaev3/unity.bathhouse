@@ -10,10 +10,12 @@ namespace Assets.Scripts.Types
         Hight
     }
 
+    [Flags]
     internal enum CameraMode
     {
         Static = 0,
-        Dynamic = 1
+        Dynamic = 1,
+        All = Static | Dynamic
     }
 
     internal class Physics
@@ -42,7 +44,7 @@ namespace Assets.Scripts.Types
 
     internal class Camera
     {
-        public CameraMode Mode = CameraMode.Dynamic;
+        public CameraMode Mode = CameraMode.All;
     }
 
     class Settings
@@ -56,7 +58,7 @@ namespace Assets.Scripts.Types
 
         public Camera Camera { get; } = new Camera();
 
-        public string VolumeName => "Глобальный обём";
+        public string VolumeName => null;
     }
 
     class SettingsManager
