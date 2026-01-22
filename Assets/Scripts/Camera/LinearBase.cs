@@ -8,9 +8,11 @@ class LinearBase : CameraBase
         Vector3 direction, 
         Func<float, CameraBase, Vector3> func, 
         string name, 
-        Bounds bounds)
+        Bounds bounds,
+        CameraDirectionType directionType)
     {
         _direction = direction;
+        _directionType = directionType;
 
         _funcLookFrom = func;
 

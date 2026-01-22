@@ -7,7 +7,7 @@ class BoundManager : IResetable
 {
     private int _currentBoundIndex = default;
 
-    private readonly (string name, float freq, Bounds bound)[] _bounds = new (string name, float freq, Bounds bound)[]
+    private readonly (string description, float freq, Bounds bound)[] _bounds = new (string description, float freq, Bounds bound)[]
     {
         //("Внутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f))),
 
@@ -18,11 +18,11 @@ class BoundManager : IResetable
         ("Забор левая сторона", 0.8f, FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f))),
     };
 
-    public (string name, Bounds bound) ActiveBound
+    public (string description, Bounds bound) ActiveBound
     {
         get
         {
-            return (_bounds[_currentBoundIndex].name, _bounds[_currentBoundIndex].bound);
+            return (_bounds[_currentBoundIndex].description, _bounds[_currentBoundIndex].bound);
         }
     }
 
@@ -30,7 +30,7 @@ class BoundManager : IResetable
     {
         if (o != null)
         {
-            _currentBoundIndex = Array.FindIndex(_bounds, x => x.name == (string)o);
+            _currentBoundIndex = Array.FindIndex(_bounds, x => x.description == (string)o);
         }
         else
         {

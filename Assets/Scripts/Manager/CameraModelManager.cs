@@ -14,6 +14,7 @@ class CameraModelManager : IResetable
     {
         _settings = settings;
         TimeSpan duration = _settings.Timer.CameraModelDuration;
+        CameraDirectionType center = CameraDirectionType.Center;
 
         _modes = new List<CameraBase>();
 
@@ -21,19 +22,19 @@ class CameraModelManager : IResetable
         {
             _modes.AddRange(new List<CameraBase>()
             {
-                new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRightFront", bound),
-                new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRightBack", bound),
+                new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRightFront", bound, center),
+                new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRightBack", bound, center),
 
-                new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeftFront", bound),
-                new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeftBack", bound),
+                new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeftFront", bound, center),
+                new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeftBack", bound, center),
 
-                new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUpFront", bound),
-                new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUpBack", bound),
+                new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUpFront", bound, center),
+                new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUpBack", bound, center),
 
-                new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUpFront", bound),
-                new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUpBack", bound),
+                new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUpFront", bound, center),
+                new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUpBack", bound, center),
 
-                new LinearRandom(duration, Linear, "Random", bound),
+                new LinearRandom(duration, Linear, "Random", bound, CameraDirectionType.Direct),
             });
         }
 
@@ -59,10 +60,7 @@ class CameraModelManager : IResetable
     {
         var bound = (Bounds)@object;
 
-        if (_settings.Camera.Mode == CameraMode.Dynamic)
-        {
-            _currentModelIndex = UniqueRandom.Next(0, _modes.Count, _currentModelIndex);
-        }
+        _currentModelIndex = UniqueRandom.Next(0, _modes.Count, _currentModelIndex);
 
         _modes.ForEach(x =>
         {

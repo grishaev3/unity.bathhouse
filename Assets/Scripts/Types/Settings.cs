@@ -13,8 +13,9 @@ namespace Assets.Scripts.Types
     [Flags]
     internal enum CameraMode
     {
-        Static = 0,
-        Dynamic = 1,
+        None = 0,
+        Static = 1,
+        Dynamic = 2,
         All = Static | Dynamic
     }
 

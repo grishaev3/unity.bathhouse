@@ -1,19 +1,10 @@
 using System;
 using UnityEngine;
 
-public interface IPeriod
-{
-    public TimeSpan Duration { get; set; }
-}
-
-public class Period : IPeriod
-{
-    public TimeSpan Duration { get; set; }
-}
-
 abstract class CameraBase : IPeriod
 {
     protected Vector3 _direction;
+    protected CameraDirectionType _directionType; 
 
     public string Name { get; protected set; }
 
@@ -31,13 +22,17 @@ abstract class CameraBase : IPeriod
     {
         _from = _funcLookFrom(normalizedTime, camera);
 
-        if (_funcLookAt == null)
+        if (_directionType == CameraDirectionType.Direct)
         {
-            _at = new Vector3(_from.x, _from.y, -2f);
+            _at = new Vector3(_from.x, _from.y, _from.z - 1f);
         }
-        else
+        else if (_funcLookAt != null)
         {
             _at = _funcLookAt(normalizedTime, camera);
+        }
+        else if (_funcLookAt == null || _directionType == CameraDirectionType.Center)
+        {
+            _at = new Vector3(_from.x, _from.y, -2f);
         }
 
         return (_from, _at);
