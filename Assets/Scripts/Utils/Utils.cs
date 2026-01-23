@@ -1,41 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public struct CircularQueue<T>
-    {
-        private T[] buffer;
-        private int head, tail, count, capacity;
-
-        public CircularQueue(int capacity)
-        {
-            this.capacity = capacity;
-            buffer = new T[capacity];
-            head = tail = count = 0;
-        }
-
-        public bool Enqueue(T item)
-        {
-            if (count == capacity) return false; // Полная
-            buffer[tail] = item;
-            tail = (tail + 1) % capacity;
-            count++;
-            return true;
-        }
-
-        public bool Dequeue(out T item)
-        {
-            if (count == 0) { item = default; return false; } // Пустая
-            item = buffer[head];
-            head = (head + 1) % capacity;
-            count--;
-            return true;
-        }
-
-        public bool IsEmpty => count == 0;
-        public int Count => count;
-    }
-
     public class Vector3Extender
     {
         public static Vector3 Random(Bounds bounds)
@@ -48,28 +16,55 @@ namespace Assets.Scripts
         }
     }
 
-    public static class UniqueRandom
+    public class UniqueRandom
     {
+        private readonly int _maxTryCount = 10;
+        private readonly string _id;
+        private int _mimValue, _maxValue;
+        private Stack<int> _stack;
+
+        public UniqueRandom(int minValue, int maxValue, string id)
+        {
+            _id = id;
+
+            _mimValue = minValue;
+            _maxValue = maxValue;
+            _stack = new Stack<int>(maxValue - minValue);
+        }
 
         public static bool NextBool()
         {
             return UnityEngine.Random.Range(1, 101) % 2 == 0;
         }
 
-        public static int Next(int minValue, int maxValue, int lastValue)
+        public void SetFreq(int number, float freq)
         {
-            var tryNumber = 0;
 
+        }
+
+        public int Next()
+        {
+            if (_id == "CameraModelManager")
+            {
+                int a = default;
+            }
+
+            _stack.TryPeek(out int lastValue);
+
+            int tryNumber = 0;
             int value;
             do
             {
-                value = UnityEngine.Random.Range(minValue, maxValue);
-                if ((tryNumber += 1) > 10)
+                value = UnityEngine.Random.Range(_mimValue, _maxValue);
+                if ((tryNumber += 1) > _maxTryCount)
+                {
                     break;
+                }
 
             } while (value == lastValue);
 
-            lastValue = value;
+            _stack.Push(value);
+            
             return value;
         }
     }

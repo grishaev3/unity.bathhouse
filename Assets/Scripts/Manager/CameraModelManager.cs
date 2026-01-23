@@ -6,9 +6,11 @@ using UnityEngine;
 
 class CameraModelManager : IResetable
 {
-    private int _currentModelIndex;
-    private readonly List<CameraBase> _modes;
     private readonly Settings _settings;
+
+    private int _currentModelIndex;
+    private readonly UniqueRandom _uniqueRandom;
+    private readonly List<CameraBase> _modes;
 
     public CameraModelManager(Bounds bound, Settings settings)
     {
@@ -51,7 +53,8 @@ class CameraModelManager : IResetable
             _modes[i].Index = i;
         }
 
-        _currentModelIndex = UniqueRandom.Next(0, _modes.Count, _currentModelIndex);
+        _uniqueRandom = new UniqueRandom(0, _modes.Count, nameof(CameraModelManager));
+        _currentModelIndex = _uniqueRandom.Next();
     }
 
     public CameraBase ActiveModel => _modes.Find(x => x.Index == _currentModelIndex);
@@ -60,7 +63,7 @@ class CameraModelManager : IResetable
     {
         var bound = (Bounds)@object;
 
-        _currentModelIndex = UniqueRandom.Next(0, _modes.Count, _currentModelIndex);
+        _currentModelIndex = _uniqueRandom.Next();
 
         _modes.ForEach(x =>
         {

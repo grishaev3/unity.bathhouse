@@ -5,18 +5,25 @@ using UnityEngine;
 
 class BoundManager : IResetable
 {
-    private int _currentBoundIndex = default;
+    private int _currentBoundIndex;
+    private readonly UniqueRandom _uniqueRandom;
+    private readonly (string description, float freq, Bounds bound)[] _bounds;
 
-    private readonly (string description, float freq, Bounds bound)[] _bounds = new (string description, float freq, Bounds bound)[]
+    public BoundManager()
     {
-        //("Внутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f))),
+        _bounds = new (string description, float freq, Bounds bound)[]
+        {
+            //("Внутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f))),
 
-        //("Внутри дома 2-ой эт.", 0.2f, FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f))),
+            //("Внутри дома 2-ой эт.", 0.2f, FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f))),
 
-        ("Глобальный обём", 0.8f, FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f))),
+            ("Глобальный обём", 0.7f, FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f))),
 
-        ("Забор левая сторона", 0.8f, FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f))),
-    };
+            ("Забор левая сторона", 0.3f, FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f))),
+        };
+
+        _uniqueRandom = new UniqueRandom(0, _bounds.Count(), nameof(BoundManager));
+    }
 
     public (string description, Bounds bound) ActiveBound
     {
@@ -26,15 +33,15 @@ class BoundManager : IResetable
         }
     }
 
-    public void Reset(object o = null)
+    public void Reset(object description = null)
     {
-        if (o != null)
+        if (description != null)
         {
-            _currentBoundIndex = Array.FindIndex(_bounds, x => x.description == (string)o);
+            _currentBoundIndex = Array.FindIndex(_bounds, x => x.description == (string)description);
         }
         else
         {
-            _currentBoundIndex = UniqueRandom.Next(0, _bounds.Count(), _currentBoundIndex);
+            _currentBoundIndex = _uniqueRandom.Next();
         }
     }
 
