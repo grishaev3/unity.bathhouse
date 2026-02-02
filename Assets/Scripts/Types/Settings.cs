@@ -21,7 +21,7 @@ namespace Assets.Scripts.Types
 
     internal class Physics
     {
-        public bool EnableSimulation = true;
+        public bool EnableSimulation => false;
         public float SleepThreshold => 0.005f;
         public int DefaultSolverIterations => 20;
         public int DefaultSolverVelocityIterations => 8;
@@ -33,13 +33,14 @@ namespace Assets.Scripts.Types
 
     internal class Timer
     {
-        public int HourStart = 5;
+        public int HourStart = 4;
         public int HourEnd = 23;
 
-        public TimeSpan CameraModelDuration => TimeSpan.FromSeconds(20);
-        public TimeSpan SunPeriodDuration => TimeSpan.FromSeconds(3);
-        public TimeSpan DawnSunPeriodDuration => TimeSpan.FromSeconds(18);
-        public TimeSpan DuskSunPeriodDuration => TimeSpan.FromSeconds(12);
+        public TimeSpan CameraModelDuration => TimeSpan.FromSeconds(30);
+        public TimeSpan NightPeriodDuration => TimeSpan.FromSeconds(3);
+        public TimeSpan SunPeriodDuration => TimeSpan.FromSeconds(12);
+        public TimeSpan DawnSunPeriodDuration => TimeSpan.FromSeconds(36);
+        public TimeSpan DuskSunPeriodDuration => TimeSpan.FromSeconds(24);
         
     }
 

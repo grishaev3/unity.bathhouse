@@ -21,36 +21,37 @@ public class SunBehaviour : MonoBehaviour
 
     void Start()
     {
-        var period = new Period { Duration = _settings.Timer.SunPeriodDuration };
+        var nightPeriod = new Period { Duration = _settings.Timer.NightPeriodDuration };
+        var sunPeriod = new Period { Duration = _settings.Timer.SunPeriodDuration };
         var dawnPeriod = new Period { Duration = _settings.Timer.DawnSunPeriodDuration };
         var duskSetPeriod = new Period { Duration = _settings.Timer.DawnSunPeriodDuration };
 
         _solarData = new SolarData[]
        {
-            new(new TimeSpan(00, 00, 0), 352.84f, -10.61f, period),
-            new(new TimeSpan(01, 00, 0), 6.83f,   -10.64f, period),
-            new(new TimeSpan(02, 00, 0), 20.63f,  -8.64f, period),
+            new(new TimeSpan(00, 00, 0), 352.84f, -10.61f, nightPeriod),
+            new(new TimeSpan(01, 00, 0), 6.83f,   -10.64f, nightPeriod),
+            new(new TimeSpan(02, 00, 0), 20.63f,  -8.64f, nightPeriod),
             new(new TimeSpan(03, 00, 0), 33.92f,  -4.65f, dawnPeriod),
             new(new TimeSpan(04, 00, 0), 46.56f,  +1.14f, dawnPeriod),
             new(new TimeSpan(05, 00, 0), 58.61f,  +7.56f, dawnPeriod),
-            new(new TimeSpan(06, 00, 0), 70.31f,  +15.11f, period),
-            new(new TimeSpan(07, 00, 0), 82.03f,  +23.27f, period),
-            new(new TimeSpan(08, 00, 0), 94.31f,  +31.67f, period),
-            new(new TimeSpan(09, 00, 0), 107.9f,  +39.93f, period),
-            new(new TimeSpan(10, 00, 0), 123.85f, +47.51f, period),
-            new(new TimeSpan(11, 00, 0), 143.34f, +53.63f, period),
-            new(new TimeSpan(12, 00, 0), 166.88f, +57.19f, period),
-            new(new TimeSpan(13, 00, 0), 192.42f, +57.24f, period),
-            new(new TimeSpan(14, 00, 0), 216.05f, +53.76f, period),
-            new(new TimeSpan(15, 00, 0), 235.66f, +47.71f, period),
-            new(new TimeSpan(16, 00, 0), 251.69f, +40.15f, period),
-            new(new TimeSpan(17, 00, 0), 265.33f, +31.91f, period),
-            new(new TimeSpan(18, 00, 0), 277.63f, +23.50f, period),
+            new(new TimeSpan(06, 00, 0), 70.31f,  +15.11f, sunPeriod),
+            new(new TimeSpan(07, 00, 0), 82.03f,  +23.27f, sunPeriod),
+            new(new TimeSpan(08, 00, 0), 94.31f,  +31.67f, sunPeriod),
+            new(new TimeSpan(09, 00, 0), 107.9f,  +39.93f, sunPeriod),
+            new(new TimeSpan(10, 00, 0), 123.85f, +47.51f, sunPeriod),
+            new(new TimeSpan(11, 00, 0), 143.34f, +53.63f, sunPeriod),
+            new(new TimeSpan(12, 00, 0), 166.88f, +57.19f, sunPeriod),
+            new(new TimeSpan(13, 00, 0), 192.42f, +57.24f, sunPeriod),
+            new(new TimeSpan(14, 00, 0), 216.05f, +53.76f, sunPeriod),
+            new(new TimeSpan(15, 00, 0), 235.66f, +47.71f, sunPeriod),
+            new(new TimeSpan(16, 00, 0), 251.69f, +40.15f, sunPeriod),
+            new(new TimeSpan(17, 00, 0), 265.33f, +31.91f, sunPeriod),
+            new(new TimeSpan(18, 00, 0), 277.63f, +23.50f, sunPeriod),
             new(new TimeSpan(19, 00, 0), 289.36f, +15.33f, duskSetPeriod),
             new(new TimeSpan(20, 00, 0), 301.05f, +7.76f, duskSetPeriod),
             new(new TimeSpan(21, 00, 0), 313.09f, +1.29f, duskSetPeriod),
-            new(new TimeSpan(22, 00, 0), 352.72f, -4.50f, period),
-            new(new TimeSpan(23, 00, 0), 338.99f, -8.57f, period)
+            new(new TimeSpan(22, 00, 0), 352.72f, -4.50f, nightPeriod),
+            new(new TimeSpan(23, 00, 0), 338.99f, -8.57f, nightPeriod)
        };
 
         _sunLight = GetComponent<Light>("Sun");
