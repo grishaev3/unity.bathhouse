@@ -36,7 +36,7 @@ namespace Assets.Scripts.Types
         public int HourStart = 4;
         public int HourEnd = 23;
 
-        public TimeSpan CameraModelDuration => TimeSpan.FromSeconds(30);
+        public TimeSpan CameraModelDuration => TimeSpan.FromSeconds(10);
         public TimeSpan NightPeriodDuration => TimeSpan.FromSeconds(3);
         public TimeSpan SunPeriodDuration => TimeSpan.FromSeconds(12);
         public TimeSpan DawnSunPeriodDuration => TimeSpan.FromSeconds(36);

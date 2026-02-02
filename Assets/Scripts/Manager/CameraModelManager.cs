@@ -24,19 +24,18 @@ class CameraModelManager : IResetable
         {
             _modes.AddRange(new List<CameraBase>()
             {
-                new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "LeftToRightFront", bound, center),
-                new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "LeftToRightBack", bound, center),
+                // смотрим сверху
+                new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "min.X => max.X {Z+}", bound, center),
+                new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "min.X => max.X {Z-}", bound, center),
+                new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "max.X => min.X {Z+}", bound, center),
+                new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "max.X => min.X {Z-}", bound, center),
 
-                new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "RightToLeftFront", bound, center),
-                new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "RightToLeftBack", bound, center),
+                new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "min.Y => max.Y {Z+}", bound, center),
+                new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "min.Y => max.Y {Z-}", bound, center),
+                new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "max.Y => min.Y {Z+}", bound, center),
+                new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "max.Y => min.Y {Z-}", bound, center),
 
-                new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "DownToUpFront", bound, center),
-                new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "DownToUpBack", bound, center),
-
-                new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "DownToUpFront", bound, center),
-                new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "DownToUpBack", bound, center),
-
-                new LinearRandom(duration, Linear, "Random", bound, CameraDirectionType.Direct),
+                //new LinearRandom(duration, Linear, "Random", bound, CameraDirectionType.Direct),
             });
         }
 
@@ -77,9 +76,9 @@ class CameraModelManager : IResetable
     {
         return model switch
         {
-            LinearBase o => Vector3.Lerp(o.A, o.B, normalizedTime),
-            StaticCamera o => Vector3.Lerp(o.A, o.B, normalizedTime),
-            _ => Vector3.zero  // или throw ArgumentException для безопасности
+            LinearBase m => Vector3.Lerp(m.A, m.B, normalizedTime),
+            StaticCamera m => Vector3.Lerp(m.A, m.B, normalizedTime),
+            _ => throw new ArgumentException(nameof(model))
         };
     }
 

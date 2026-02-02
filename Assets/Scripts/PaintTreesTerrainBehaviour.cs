@@ -4,7 +4,7 @@ using UnityEngine;
 public class PaintTreesTerrainBehaviour : MonoBehaviour
 {
     public Terrain terrain;
-    public int treeCount = 10000;
+    public int treeCount = 0;
 
 
     private readonly Vector2 _terrainTopLeft = new(-25f, +25f);
@@ -52,8 +52,8 @@ public class PaintTreesTerrainBehaviour : MonoBehaviour
                 {
                     position = candidatePos,
                     prototypeIndex = Random.Range(0, 6),
-                    widthScale = Random.Range(0.8f, 1.2f),
-                    heightScale = Random.Range(0.8f, 1.2f),
+                    widthScale = Random.Range(0.6f, 0.8f),
+                    heightScale = Random.Range(0.6f, 0.8f),
                     color = Color.white,
                     lightmapColor = Color.white
                 };
