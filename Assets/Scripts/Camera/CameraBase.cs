@@ -3,7 +3,6 @@ using UnityEngine;
 
 abstract class CameraBase : IPeriod
 {
-    protected Vector3 _direction;
     protected CameraDirectionType _directionType; 
 
     public string Name { get; protected set; }
@@ -38,5 +37,5 @@ abstract class CameraBase : IPeriod
         return (_from, _at);
     }
 
-    public abstract void Reset(Bounds bounds);
+    public abstract void Reset(BoundParameters bounds);
 }

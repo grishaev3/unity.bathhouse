@@ -2,7 +2,7 @@ using System;
 using Assets.Scripts.Types;
 using UnityEngine;
 
-class TimeManager : IResetable
+class TimeManager : IResetable<double>
 {
     internal enum SunCircle
     {
@@ -85,8 +85,8 @@ class TimeManager : IResetable
         return new TimeSpan(lerpedTicks);
     }
 
-    public void Reset(object o = null)
+    public void Reset(double d = 0)
     {
-        _msCurrentTime = 0d;
+        _msCurrentTime = d;
     }
 }

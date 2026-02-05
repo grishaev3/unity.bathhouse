@@ -2,10 +2,9 @@ using System;
 using UnityEngine;
 
 
-
 class LinearBase : CameraBase
 {
-    internal class Range<T>
+    class Range<T>
     {
         public T Min { get; set; }
         public T Max { get; set; }
@@ -22,7 +21,7 @@ class LinearBase : CameraBase
         }
     }
 
-    internal class Properties
+    class Properties
     {
         public Range<float> X { get; set; }
         public Range<float> Y { get; set; }
@@ -48,13 +47,11 @@ class LinearBase : CameraBase
 
     public LinearBase(
         TimeSpan duration, 
-        Vector3 direction, 
         Func<float, CameraBase, Vector3> func, 
-        string name, 
-        Bounds bounds,
+        string name,
+        BoundParameters bounds,
         CameraDirectionType directionType)
     {
-        _direction = direction;
         _directionType = directionType;
 
         _funcLookFrom = func;
@@ -69,8 +66,11 @@ class LinearBase : CameraBase
     /// direction.x = -1 +1 направление
     /// direction.y < 1.0f коеффициент 
     /// direction.z minValue maxValue по объёму
-    public override void Reset(Bounds bound)
+    public override void Reset(BoundParameters boundParameters)
     {
+        Bounds bound = boundParameters.Bound;
+        Vector3 _direction = boundParameters.CurrentMoveset;
+
         float start, end, z;
         z = CalculateDepth(bound);
 

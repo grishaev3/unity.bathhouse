@@ -4,8 +4,8 @@ using UnityEngine;
 
 class LinearRandom : LinearBase
 {
-    public LinearRandom(TimeSpan duration, Func<float, CameraBase, Vector3> func, string name, Bounds bounds, CameraDirectionType directionType) :
-        base(duration, Vector3.zero, func, name, bounds, directionType)
+    public LinearRandom(TimeSpan duration, Func<float, CameraBase, Vector3> func, string name, BoundParameters bounds, CameraDirectionType directionType) :
+        base(duration, func, name, bounds, directionType)
     {
         _funcLookFrom = func;
 
@@ -16,10 +16,12 @@ class LinearRandom : LinearBase
         Reset(bounds);
     }
 
-    public override void Reset(Bounds bounds)
+    public override void Reset(BoundParameters boundParameters)
     {
-        A = Vector3Extender.Random(bounds);
+        Bounds bound = boundParameters.Bound;
 
-        B = Vector3Extender.Random(bounds);
+        A = Vector3Extender.Random(bound);
+
+        B = Vector3Extender.Random(bound);
     }
 }

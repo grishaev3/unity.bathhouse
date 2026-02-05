@@ -1,4 +1,4 @@
-public interface IResetable
+interface IResetable<T>
 {
-    void Reset(object o);
+    void Reset(T o);
 }

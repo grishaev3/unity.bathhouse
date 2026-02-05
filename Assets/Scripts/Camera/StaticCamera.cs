@@ -24,10 +24,10 @@ class StaticCamera : CameraBase
 
         Name = name;
 
-        Reset(new Bounds());
+        Reset(null);
     }
 
-    public override void Reset(Bounds bounds)
+    public override void Reset(BoundParameters bounds)
     {
     }
 }

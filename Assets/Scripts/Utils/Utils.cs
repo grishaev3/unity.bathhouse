@@ -34,7 +34,7 @@ namespace Assets.Scripts
 
         public static bool NextBool()
         {
-            return UnityEngine.Random.Range(1, 101) % 2 == 0;
+            return UnityEngine.Random.Range(0, 1024) % 2 == 0;
         }
 
         public void SetFreq(int number, float freq)

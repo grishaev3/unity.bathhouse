@@ -1,6 +1,6 @@
 using Assets.Scripts;
 
-class StateManager : IResetable
+class StateManager : IResetable<object>
 {
     private bool _currentCameraMode;
 

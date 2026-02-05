@@ -6,5 +6,5 @@ class SphereModel : CameraBase
 
     public float Radius { get; set; } = 6f;
 
-    public override void Reset(Bounds bounds) { }
+    public override void Reset(BoundParameters bounds) { }
 }

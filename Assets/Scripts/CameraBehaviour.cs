@@ -41,10 +41,10 @@ public class CameraBehaviour : MonoBehaviour
         _stateManager.Reset();
 
         _boundManager.Reset(_settings.VolumeName);
-        (string description, Bounds bound) = _boundManager.ActiveBound;
-        _modelManager.Reset(bound);
+        BoundParameters activeBound = _boundManager.ActiveBound;
+        _modelManager.Reset(activeBound);
 
         CameraBase model = _modelManager.ActiveModel;
-        Debug.Log($"_currentMode: {description}-{model.Name}");
+        Debug.Log($"_currentMode: {activeBound.Description}-{model.Name}");
     }
 }

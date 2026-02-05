@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-class CameraModelManager : IResetable
+class CameraModelManager : IResetable<BoundParameters>
 {
     private readonly Settings _settings;
 
@@ -12,11 +12,12 @@ class CameraModelManager : IResetable
     private readonly UniqueRandom _uniqueRandom;
     private readonly List<CameraBase> _modes;
 
-    public CameraModelManager(Bounds bound, Settings settings)
+    public CameraModelManager(BoundParameters boundParameters, Settings settings)
     {
         _settings = settings;
         TimeSpan duration = _settings.Timer.CameraModelDuration;
         CameraDirectionType center = CameraDirectionType.Center;
+        CameraDirectionType direct = CameraDirectionType.Center;
 
         _modes = new List<CameraBase>();
 
@@ -25,17 +26,8 @@ class CameraModelManager : IResetable
             _modes.AddRange(new List<CameraBase>()
             {
                 // смотрим сверху
-                new LinearBase(duration, new Vector3(+1f, 0.5f, +float.MaxValue), Linear, "min.X => max.X {Z+}", bound, center),
-                new LinearBase(duration, new Vector3(+1f, 0.5f, -float.MaxValue), Linear, "min.X => max.X {Z-}", bound, center),
-                new LinearBase(duration, new Vector3(-1f, 0.5f, +float.MaxValue), Linear, "max.X => min.X {Z+}", bound, center),
-                new LinearBase(duration, new Vector3(-1f, 0.5f, -float.MaxValue), Linear, "max.X => min.X {Z-}", bound, center),
-
-                new LinearBase(duration, new Vector3(+1.5f, 1f, +float.MaxValue), Linear, "min.Y => max.Y {Z+}", bound, center),
-                new LinearBase(duration, new Vector3(-1.5f, 1f, -float.MaxValue), Linear, "min.Y => max.Y {Z-}", bound, center),
-                new LinearBase(duration, new Vector3(+1.5f, -1f, +float.MaxValue), Linear, "max.Y => min.Y {Z+}", bound, center),
-                new LinearBase(duration, new Vector3(-1.5f, -1f, -float.MaxValue), Linear, "max.Y => min.Y {Z-}", bound, center),
-
-                //new LinearRandom(duration, Linear, "Random", bound, CameraDirectionType.Direct),
+                new LinearBase(duration, Linear, "Linear", boundParameters, center),
+                new LinearRandom(duration, Linear, "Random", boundParameters, direct),
             });
         }
 
@@ -53,34 +45,32 @@ class CameraModelManager : IResetable
         }
 
         _uniqueRandom = new UniqueRandom(0, _modes.Count, nameof(CameraModelManager));
+
         _currentModelIndex = _uniqueRandom.Next();
+        boundParameters.Reset(default);
     }
 
     public CameraBase ActiveModel => _modes.Find(x => x.Index == _currentModelIndex);
 
-    public void Reset(object @object)
+    public void Reset(BoundParameters boundParameters)
     {
-        var bound = (Bounds)@object;
-
         _currentModelIndex = _uniqueRandom.Next();
+        boundParameters.Reset(default);
 
         _modes.ForEach(x =>
         {
-            x.Reset(bound);
+            x.Reset(boundParameters);
         });
     }
 
     public int Count => _modes.Count;
 
-    private Vector3 Linear(float normalizedTime, CameraBase model)
+    private Vector3 Linear(float normalizedTime, CameraBase model) => model switch
     {
-        return model switch
-        {
-            LinearBase m => Vector3.Lerp(m.A, m.B, normalizedTime),
-            StaticCamera m => Vector3.Lerp(m.A, m.B, normalizedTime),
-            _ => throw new ArgumentException(nameof(model))
-        };
-    }
+        LinearBase m => Vector3.Lerp(m.A, m.B, normalizedTime),
+        StaticCamera m => Vector3.Lerp(m.A, m.B, normalizedTime),
+        _ => throw new ArgumentException(nameof(model))
+    };
 
     private Vector3 Sphere(float normalizedTime, CameraBase model)
     {

@@ -19,7 +19,7 @@ public class GameInstaller : MonoInstaller
         {
             var boundManager = context.Container.Resolve<BoundManager>();
             var settings = context.Container.Resolve<Settings>();
-            return new CameraModelManager(boundManager.ActiveBound.bound, settings);
+            return new CameraModelManager(boundManager.ActiveBound, settings);
         }).AsSingle().NonLazy();
 
         Container.Bind<SettingsManager>().AsSingle().WithArguments(PresetLevel.Low).NonLazy();
