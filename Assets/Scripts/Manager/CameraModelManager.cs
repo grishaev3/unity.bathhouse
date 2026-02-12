@@ -34,8 +34,22 @@ class CameraModelManager : IResetable<BoundParameters>
         if (_settings.Camera.Mode.HasFlag(CameraMode.Static))
         {
             _modes.AddRange(new List<CameraBase>() {
-                new StaticCamera(duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
-                new StaticCamera(duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(+5f, 1.97f, 0f), new Vector3(-5f, 1.97f, 0f), "Static1")
+                //new StaticCamera(duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
+                //new StaticCamera(duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(+5f, 1.97f, 0f), new Vector3(-5f, 1.97f, 0f), "Static1"),
+
+                new StaticCamera(duration,
+                    funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
+                    funcLookTo: Linear, 
+                    new Vector3(+7f, -0.5f, -3f), 
+                    new Vector3(+6.5f, 4f, -3f),
+                    "вышка_сваи_y+"),
+
+                new StaticCamera(duration,
+                    funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
+                    funcLookTo: Linear,
+                    new Vector3(+6.5f, 4f, -3f),
+                    new Vector3(+7f, -0.5f, -3f),
+                    "вышка_сваи_y-")
             });
         }
 

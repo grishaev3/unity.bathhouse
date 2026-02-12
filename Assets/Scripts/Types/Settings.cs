@@ -46,7 +46,7 @@ namespace Assets.Scripts.Types
 
     internal class Camera
     {
-        public CameraMode Mode = CameraMode.Dynamic;
+        public CameraMode Mode = CameraMode.Static;
     }
 
     class Settings
