@@ -1,5 +1,6 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -39,16 +40,10 @@ namespace Assets.Scripts
 
         public void SetFreq(int number, float freq)
         {
-
         }
 
         public int Next()
         {
-            if (_id == "CameraModelManager")
-            {
-                int a = default;
-            }
-
             _stack.TryPeek(out int lastValue);
 
             int tryNumber = 0;
@@ -66,6 +61,47 @@ namespace Assets.Scripts
             _stack.Push(value);
             
             return value;
+        }
+    }
+
+    public class WeightedRandomGenerator
+    {
+        private readonly System.Random _random = new System.Random();
+        private readonly int[] _values;
+        private readonly double[] _cumulativeProbs;
+
+        public WeightedRandomGenerator(int[] values, double[] probabilities)
+        {
+            if (values.Length != probabilities.Length)
+                throw new ArgumentException("Массивы должны быть одинаковой длины");
+
+            _values = values;
+
+            // Нормализация и кумулятивная сумма
+            double totalProb = probabilities.Sum();
+            _cumulativeProbs = new double[probabilities.Length];
+            double sum = 0;
+            for (int i = 0; i < probabilities.Length; i++)
+            {
+                sum += probabilities[i] / totalProb;
+                _cumulativeProbs[i] = sum;
+            }
+        }
+
+        public int Next()
+        {
+            double r = _random.NextDouble();
+            // Бинарный поиск для эффективности (O(log n))
+            int left = 0, right = _cumulativeProbs.Length - 1;
+            while (left <= right)
+            {
+                int mid = (left + right) / 2;
+                if (_cumulativeProbs[mid] < r)
+                    left = mid + 1;
+                else
+                    right = mid - 1;
+            }
+            return _values[left];
         }
     }
 }

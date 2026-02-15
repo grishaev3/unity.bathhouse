@@ -1,37 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Assets.Scripts;
+using System;
+using System.Linq;
 using UnityEngine;
-
-class BoundParameters : IResetable<int>
-{
-    private UniqueRandom _uniqueRandom;
-    private int _currentModelIndex;
-
-    public string Description { get; private set; }
-    public float Freq { get; private set; }
-    public Bounds Bound { get; private set; }
-    public Vector3[] CameraMovesets { get; private set; }
-
-    public BoundParameters(string description, float freq, Bounds bound, Vector3[] cameraMovesets)
-    {
-        Description = description;
-        Freq = freq;
-        Bound = bound;
-        CameraMovesets = cameraMovesets;
-
-        _uniqueRandom = new UniqueRandom(0, cameraMovesets.Length, nameof(CameraModelManager));
-        _currentModelIndex = _uniqueRandom.Next();
-    }
-
-    public Vector3 CurrentMoveset => CameraMovesets[_currentModelIndex];
-
-    public void Reset(int o)
-    {
-        _currentModelIndex = _uniqueRandom.Next();
-    }
-}
 
 class BoundManager : IResetable<string>
 {
@@ -41,15 +11,15 @@ class BoundManager : IResetable<string>
 
     public BoundManager()
     {
-        List<Vector3> houseMoveset = new()
+        Vector3[] defaultMoveset =
         {
             new(+1f, 0.5f, +float.MaxValue),
             new(+1f, 0.5f, -float.MaxValue),
             new(-1f, 0.5f, +float.MaxValue),
             new(-1f, 0.5f, -float.MaxValue),
 
-            new(+1.5f, 1f, +float.MaxValue),
-            new(-1.5f, 1f, -float.MaxValue),
+            new(+1.5f, +1f, +float.MaxValue),
+            new(-1.5f, +1f, -float.MaxValue),
             new(+1.5f, -1f, +float.MaxValue),
             new(-1.5f, -1f, -float.MaxValue),
         };
@@ -58,8 +28,8 @@ class BoundManager : IResetable<string>
         {
             //new("Внутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f)), houseMoveset.ToArray()),
             //new("Внутри дома 2-ой эт.", 0.2f, FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f)), houseMoveset),
-            new("Глобальный объём", 0.7f, FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f)), houseMoveset.ToArray()),
-            //new("Забор левая сторона", 0.3f, FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f)), new List<Vector3>()),
+            new("Глобальный объём", 0.7f, FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f)), defaultMoveset),
+            new("Забор левая сторона", 0.3f, FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f)), defaultMoveset),
         };
 
         _uniqueRandom = new UniqueRandom(0, _bounds.Count(), nameof(BoundManager));
