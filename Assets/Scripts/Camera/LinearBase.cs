@@ -43,15 +43,16 @@ class LinearBase : CameraBase
     public Vector3 A { get; set; }
     public Vector3 B { get; set; }
 
-    private Properties _properties;
-
     public LinearBase(
+        float freq,
         TimeSpan duration, 
         Func<float, CameraBase, Vector3> func, 
         string name,
         BoundParameters bounds,
         CameraDirectionType directionType)
     {
+        Freq = freq;
+
         _directionType = directionType;
 
         _funcLookFrom = func;

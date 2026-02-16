@@ -11,7 +11,7 @@ class BoundParameters : IResetable<int>
     public Bounds Bound { get; private set; }
     public Vector3[] CameraMovesets { get; private set; }
 
-    public BoundParameters(string description, float freq, Bounds bound, Vector3[] cameraMovesets)
+    public BoundParameters(float freq, string description, Bounds bound, Vector3[] cameraMovesets)
     {
         Description = description;
         Freq = freq;

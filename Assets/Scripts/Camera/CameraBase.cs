@@ -5,6 +5,8 @@ abstract class CameraBase : IPeriod
 {
     protected CameraDirectionType _directionType; 
 
+    public float Freq { get; protected set; }
+    
     public string Name { get; protected set; }
 
     public int Index { get; set; }

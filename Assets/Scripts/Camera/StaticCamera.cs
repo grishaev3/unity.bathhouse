@@ -8,12 +8,15 @@ class StaticCamera : CameraBase
     public Vector3 B { get; set; }
 
     public StaticCamera(
+        float freq,
         TimeSpan duration,
         Func<float, CameraBase, Vector3> funcLookFrom,
         Func<float, CameraBase, Vector3> funcLookTo,
         Vector3 a, Vector3 b,
         string name)
     {
+        Freq = freq;
+
         A = a;
         B = b;
 

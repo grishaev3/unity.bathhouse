@@ -2,6 +2,8 @@ using Assets.Scripts;
 using Assets.Scripts.Types;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 class CameraModelManager : IResetable<BoundParameters>
@@ -19,46 +21,38 @@ class CameraModelManager : IResetable<BoundParameters>
         CameraDirectionType center = CameraDirectionType.Center;
         CameraDirectionType direct = CameraDirectionType.Center;
 
-        _modes = new List<CameraBase>();
-
-        if (_settings.Camera.Mode.HasFlag(CameraMode.Dynamic))
+        float oftenFreq = 0.5f;
+        float rarelyFreq = 0.3f;
+        float staticFreq = (1.0f - (oftenFreq + rarelyFreq)) / 4;
+        _modes = new List<CameraBase>()
         {
-            _modes.AddRange(new List<CameraBase>()
-            {
-                // смотрим сверху
-                new LinearBase(duration, Linear, "Linear", boundParameters, center),
-                new LinearRandom(duration, Linear, "Random", boundParameters, direct),
-            });
-        }
+            // смотрим сверху
+            new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, center),
+            new LinearRandom(rarelyFreq, duration, Linear, "Random", boundParameters, direct),
 
-        if (_settings.Camera.Mode.HasFlag(CameraMode.Static))
-        {
-            _modes.AddRange(new List<CameraBase>() {
-                new StaticCamera(duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
-                new StaticCamera(duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(+5f, 1.97f, 0f), new Vector3(-5f, 1.97f, 0f), "Static1"),
-
-                new StaticCamera(duration,
-                    funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
-                    funcLookTo: Linear, 
-                    new Vector3(+7f, -0.5f, -3f), 
-                    new Vector3(+6.5f, 4f, -3f),
-                    "вышка_сваи_y+"),
-
-                new StaticCamera(duration,
-                    funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
-                    funcLookTo: Linear,
-                    new Vector3(+6.5f, 4f, -3f),
-                    new Vector3(+7f, -0.5f, -3f),
-                    "вышка_сваи_y-")
-            });
-        }
+            new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
+            new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(+5f, 1.97f, 0f), new Vector3(-5f, 1.97f, 0f), "Static1"),
+            new StaticCamera(staticFreq, duration,
+                funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
+                funcLookTo: Linear,
+                new Vector3(+7f, -0.5f, -3f),
+                new Vector3(+6.5f, 4f, -3f),
+                "вышка_сваи_y+"),
+            new StaticCamera(staticFreq, duration,
+                funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
+                funcLookTo: Linear,
+                new Vector3(+6.5f, 4f, -3f),
+                new Vector3(+7f, -0.5f, -3f),
+                "вышка_сваи_y-")
+        };
 
         for (int i = 0; i < _modes.Count; i++)
         {
             _modes[i].Index = i;
         }
 
-        _uniqueRandom = new UniqueRandom(0, _modes.Count, nameof(CameraModelManager));
+        double[] probabilities = _modes.Select(x => (double)x.Freq).ToArray();
+        _uniqueRandom = new UniqueRandom(0, _modes.Count, probabilities, nameof(CameraModelManager));
 
         _currentModelIndex = _uniqueRandom.Next();
         boundParameters.Reset(default);

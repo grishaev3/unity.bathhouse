@@ -26,13 +26,14 @@ class BoundManager : IResetable<string>
 
         _bounds = new BoundParameters[]
         {
-            //new("Внутри дома 1-ый эт.", 0.2f, FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f)), houseMoveset.ToArray()),
-            //new("Внутри дома 2-ой эт.", 0.2f, FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f)), houseMoveset),
-            new("Глобальный объём", 0.7f, FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f)), defaultMoveset),
-            new("Забор левая сторона", 0.3f, FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f)), defaultMoveset),
+            new(0.1f, "Внутри дома 1-ый эт.", FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f)), defaultMoveset),
+            new(0.1f, "Внутри дома 2-ой эт.", FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f)), defaultMoveset),
+            new(0.4f, "Глобальный объём", FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f)), defaultMoveset),
+            new(0.4f, "Забор левая сторона", FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f)), defaultMoveset),
         };
 
-        _uniqueRandom = new UniqueRandom(0, _bounds.Count(), nameof(BoundManager));
+        double[] probabilities = _bounds.Select(x => (double)x.Freq).ToArray();
+        _uniqueRandom = new UniqueRandom(0, _bounds.Count(), probabilities, nameof(BoundManager));
     }
 
     public BoundParameters ActiveBound => _bounds[_currentBoundIndex];
