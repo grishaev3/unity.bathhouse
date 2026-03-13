@@ -27,23 +27,38 @@ class CameraModelManager : IResetable<BoundParameters>
         _modes = new List<CameraBase>()
         {
             // смотрим сверху
-            new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, center),
-            new LinearRandom(rarelyFreq, duration, Linear, "Random", boundParameters, direct),
+            //new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, center),
+            //new LinearRandom(rarelyFreq, duration, Linear, "Random", boundParameters, direct),
 
-            new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
-            new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(+5f, 1.97f, 0f), new Vector3(-5f, 1.97f, 0f), "Static1"),
+            //new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
+            //new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(+5f, 1.97f, 0f), new Vector3(-5f, 1.97f, 0f), "Static1"),
+            //new StaticCamera(staticFreq, duration,
+            //    funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
+            //    funcLookTo: Linear,
+            //    new Vector3(+7f, -0.5f, -3f),
+            //    new Vector3(+6.5f, 4f, -3f),
+            //    "вышка_сваи_y+"),
+            //new StaticCamera(staticFreq, duration,
+            //    funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
+            //    funcLookTo: Linear,
+            //    new Vector3(+6.5f, 4f, -3f),
+            //    new Vector3(+7f, -0.5f, -3f),
+            //    "вышка_сваи_y-"),
+
             new StaticCamera(staticFreq, duration,
-                funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
+                funcLookFrom: (_, _) => new Vector3(-6.79f, 1, 10.12f),
                 funcLookTo: Linear,
-                new Vector3(+7f, -0.5f, -3f),
-                new Vector3(+6.5f, 4f, -3f),
-                "вышка_сваи_y+"),
+                new Vector3(-18.23f, 1, 20.15f),
+                new Vector3(-14.85f, 1, 20.15f),
+                "bar_x+"),
+
             new StaticCamera(staticFreq, duration,
-                funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
+                funcLookFrom: (_, _) => new Vector3(-6.79f, 1, 10.12f),
                 funcLookTo: Linear,
-                new Vector3(+6.5f, 4f, -3f),
-                new Vector3(+7f, -0.5f, -3f),
-                "вышка_сваи_y-")
+                new Vector3(-14.85f, 1, 20.15f),
+                new Vector3(-18.23f, 1, 20.15f),
+                "bar_x-")
+
         };
 
         for (int i = 0; i < _modes.Count; i++)
