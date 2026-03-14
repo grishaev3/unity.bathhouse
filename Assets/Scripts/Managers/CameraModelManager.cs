@@ -67,7 +67,7 @@ class CameraModelManager : IResetable<BoundParameters>
         }
 
         double[] probabilities = _modes.Select(x => (double)x.Freq).ToArray();
-        _uniqueRandom = new UniqueRandom(0, _modes.Count, probabilities, nameof(CameraModelManager));
+        _uniqueRandom = new UniqueRandom(0, _modes.Count, probabilities, UniqueRandom.Type.Simple);
 
         _currentModelIndex = _uniqueRandom.Next();
         boundParameters.Reset(default);
@@ -77,7 +77,7 @@ class CameraModelManager : IResetable<BoundParameters>
 
     public void Reset(BoundParameters boundParameters)
     {
-        _currentModelIndex = _uniqueRandom.Next();
+        _currentModelIndex = _uniqueRandom.Next(_currentModelIndex);
         boundParameters.Reset(default);
 
         _modes.ForEach(x =>

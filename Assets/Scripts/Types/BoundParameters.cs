@@ -1,4 +1,3 @@
-using Assets.Scripts;
 using UnityEngine;
 
 class BoundParameters : IResetable<int>
@@ -18,7 +17,7 @@ class BoundParameters : IResetable<int>
         Bound = bound;
         CameraMovesets = cameraMovesets;
 
-        _uniqueRandom = new UniqueRandom(0, cameraMovesets.Length, nameof(CameraModelManager));
+        _uniqueRandom = new UniqueRandom(0, cameraMovesets.Length);
         _currentModelIndex = _uniqueRandom.Next();
     }
 

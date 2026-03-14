@@ -33,7 +33,7 @@ class BoundManager : IResetable<string>
         };
 
         double[] probabilities = _bounds.Select(x => (double)x.Freq).ToArray();
-        _uniqueRandom = new UniqueRandom(0, _bounds.Count(), probabilities, nameof(BoundManager));
+        _uniqueRandom = new UniqueRandom(0, _bounds.Count(), probabilities);
     }
 
     public BoundParameters ActiveBound => _bounds[_currentBoundIndex];
