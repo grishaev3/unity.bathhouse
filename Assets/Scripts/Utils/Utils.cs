@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine;
 
-
 public class Vector3Extender
 {
     public static Vector3 Random(Bounds bounds)
