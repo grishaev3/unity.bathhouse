@@ -171,7 +171,7 @@ MonoBehaviour:
       useMipBias: 1
       advancedUpscalersByPriority: 0100
       advancedUpscalerNames:
-      - DLSS
+      - FSR2
       DLSSPerfQualitySetting: 1
       DLSSInjectionPoint: 2
       TAAUInjectionPoint: 2
@@ -186,7 +186,7 @@ MonoBehaviour:
       DLSSRenderPresetForDLAA: 4
       FSR2EnableSharpness: 1
       FSR2Sharpness: 0.1
-      FSR2UseOptimalSettings: 0
+      FSR2UseOptimalSettings: 1
       FSR2QualitySetting: 3
       FSR2InjectionPoint: 2
       fsrOverrideSharpness: 0
