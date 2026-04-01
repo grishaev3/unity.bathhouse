@@ -3297,15 +3297,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742473837712756890, guid: a46e20553733bce47b61ad8841303eaf, type: 3}
       propertyPath: m_LODs.Array.data[0].screenRelativeHeight
-      value: 0.03196174
+      value: 0.0020431054
       objectReference: {fileID: 0}
     - target: {fileID: 4742473837712756890, guid: a46e20553733bce47b61ad8841303eaf, type: 3}
       propertyPath: m_LODs.Array.data[1].screenRelativeHeight
-      value: 0.01598087
+      value: 0.0010215527
       objectReference: {fileID: 0}
     - target: {fileID: 4742473837712756890, guid: a46e20553733bce47b61ad8841303eaf, type: 3}
       propertyPath: m_LODs.Array.data[2].screenRelativeHeight
-      value: 0.0006392348
+      value: 0.000040862113
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5440,7 +5440,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dd5b825bd0be47743827d7c9bc516388, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.779
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dd5b825bd0be47743827d7c9bc516388, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5448,7 +5448,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dd5b825bd0be47743827d7c9bc516388, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19.407
+      value: 19.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dd5b825bd0be47743827d7c9bc516388, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5486,13 +5486,17 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: dd5b825bd0be47743827d7c9bc516388, type: 3}
+      propertyPath: m_RayTracingAccelStructBuildFlagsOverride
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dd5b825bd0be47743827d7c9bc516388, type: 3}
       propertyPath: m_Name
       value: "\u0414\u0440\u043E\u0432\u0430"
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dd5b825bd0be47743827d7c9bc516388, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

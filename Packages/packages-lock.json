@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.autodesk.fbx": {
+      "version": "5.1.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.svermeulen.extenject": {
       "version": "https://github.com/modesttree/Zenject.git?path=UnityProject/Assets/Plugins/Zenject",
       "depth": 0,
@@ -61,6 +68,15 @@
         "com.unity.performance.profile-analyzer": "1.2.4",
         "com.unity.test-framework": "1.6.0",
         "com.unity.testtools.codecoverage": "1.2.7"
+      }
+    },
+    "com.unity.formats.fbx": {
+      "version": "file:com.unity.formats.fbx",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.timeline": "1.7.1",
+        "com.autodesk.fbx": "5.1.1"
       }
     },
     "com.unity.ide.rider": {

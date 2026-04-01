@@ -1,4 +1,3 @@
-using Assets.Scripts;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -28,8 +27,9 @@ class BoundManager : IResetable<string>
         {
             new(0.1f, "Внутри дома 1-ый эт.", FromZero(new Vector3(0f, 0.35f, -2f), new Vector3(5f, 2.40f, 3f)), defaultMoveset),
             new(0.1f, "Внутри дома 2-ой эт.", FromZero(new Vector3(0f, 3.35f, -2f), new Vector3(3.40f, 2.00f, 3f)), defaultMoveset),
-            new(0.4f, "Глобальный объём", FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f)), defaultMoveset),
-            new(0.4f, "Забор левая сторона", FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f)), defaultMoveset),
+            new(0.2f, "Глобальный объём", FromZero(new Vector3(0f, 0.5f, -2f), new Vector3(8f, 6f, 12f)), defaultMoveset),
+            new(0.2f, "Забор левая сторона", FromMinMax(new Vector3(0f, 0.5f, 17f), new Vector3(11f, 4f, -10f)), defaultMoveset),
+            new(0.4f, "Дом.2", FromZero(new Vector3(-8.2f, 0.5f, 19.4f), new Vector3(10f, 5f, -10f)), defaultMoveset),
         };
 
         double[] probabilities = _bounds.Select(x => (double)x.Freq).ToArray();
