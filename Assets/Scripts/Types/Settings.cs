@@ -33,7 +33,7 @@ namespace Assets.Scripts.Types
 
     internal class Timer
     {
-        public int HourStart = 5;
+        public int HourStart = 0;
         public int HourEnd = 23;
 
         public TimeSpan CameraModelDuration => TimeSpan.FromSeconds(10);
@@ -77,12 +77,12 @@ namespace Assets.Scripts.Types
             {
                 [PresetLevel.Low] = new Settings
                 {
-                    TargetFPS = 40,
+                    TargetFPS = 50,
                     SyncCount = 0
                 },
                 [PresetLevel.Medium] = new Settings
                 {
-                    TargetFPS = 60,
+                    TargetFPS = 75,
                     SyncCount = 0
                 },
                 [PresetLevel.Hight] = new Settings

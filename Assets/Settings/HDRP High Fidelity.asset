@@ -54,8 +54,8 @@ MonoBehaviour:
     depthBufferFormat: 0
     supportCustomPass: 1
     supportVariableRateShading: 1
-    customBufferFormat: 12
-    supportedLitShaderMode: 3
+    customBufferFormat: 74
+    supportedLitShaderMode: 2
     planarReflectionResolution:
       m_Values: 000100000004000000080000
       m_SchemaId:
@@ -75,8 +75,8 @@ MonoBehaviour:
     supportScreenSpaceLensFlare: 1
     supportDataDrivenLensFlare: 1
     supportDitheringCrossFade: 1
-    supportRuntimeAOVAPI: 0
-    supportTerrainHole: 0
+    supportRuntimeAOVAPI: 1
+    supportTerrainHole: 1
     lightProbeSystem: 1
     oldLightProbeSystem: 1
     probeVolumeMemoryBudget: 1024
@@ -88,7 +88,7 @@ MonoBehaviour:
     probeVolumeBlendingMemoryBudget: 128
     supportRayTracing: 1
     supportVFXRayTracing: 1
-    supportedRayTracingMode: 3
+    supportedRayTracingMode: 2
     lightLoopSettings:
       cookieAtlasSize: 512
       cookieFormat: 74

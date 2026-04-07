@@ -29,8 +29,11 @@ class UniqueRandom
     private int[] _values;
 
 
-    public UniqueRandom(int minValue, int maxValue, Type type = Type.Freq)
+    private string _name;
+
+    public UniqueRandom(string name, int minValue, int maxValue, Type type = Type.Freq)
     {
+        _name = name;
         _type = type;
         var values = Enumerable.Range(minValue, maxValue - minValue).ToArray();
         var probabilities = values.Select(x => 1.0d / values.Length).ToArray();
@@ -38,8 +41,9 @@ class UniqueRandom
         CtorImpl(values, probabilities);
     }
 
-    public UniqueRandom(int minValue, int maxValue, double[] probabilities, Type type = Type.Freq)
+    public UniqueRandom(string name, int minValue, int maxValue, double[] probabilities, Type type = Type.Freq)
     {
+        _name = name;
         _type = type;
         var values = Enumerable.Range(minValue, maxValue - minValue).ToArray();
 
@@ -71,11 +75,11 @@ class UniqueRandom
     /// <returns></returns>
     public int Next(int previousValue = 0)
     {
-        if (_type == Type.Simple)
-        {
-            int newValue = _random.Next(_values.First(), _values.Last());
-            return newValue >= previousValue ? newValue + 1 : newValue;
-        }
+        //if (_type == Type.Simple)
+        //{
+        //    int newValue = _random.Next(_values.First(), _values.Last());
+        //    return newValue >= previousValue ? newValue + 1 : newValue;
+        //}
 
         double r = _random.NextDouble();
         // Бинарный поиск для эффективности (O(log n))
@@ -84,17 +88,23 @@ class UniqueRandom
         {
             int mid = (left + right) / 2;
             if (_cumulativeProbs[mid] < r)
+            {
                 left = mid + 1;
+            }
             else
+            {
                 right = mid - 1;
+            }
         }
-        return _values[left];
+
+        int result = _values[left];
+
+        return result;
     }
 
     public static bool NextBool()
     {
         return UnityEngine.Random.Range(0, int.MaxValue) % 2 == 0;
     }
-
 }
 
