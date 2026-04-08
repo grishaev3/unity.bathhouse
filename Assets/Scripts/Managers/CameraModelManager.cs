@@ -27,7 +27,7 @@ class CameraModelManager : IResetable<BoundParameters>
         _modes = new List<CameraBase>()
         {
             // смотрим сверху
-            new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, center),
+            new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, direct),
             new LinearRandom(rarelyFreq, duration, Linear, "Random", boundParameters, direct),
 
             new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
@@ -68,7 +68,7 @@ class CameraModelManager : IResetable<BoundParameters>
         }
 
         double[] probabilities = _modes.Select(x => (double)x.Freq).ToArray();
-        _uniqueRandom = new UniqueRandom(nameof(_modes), 0, _modes.Count, probabilities, UniqueRandom.Type.Simple);
+        _uniqueRandom = new UniqueRandom(nameof(_modes), 0, _modes.Count, probabilities);
 
         _currentModelIndex = _uniqueRandom.Next();
         boundParameters.Reset(default);
@@ -76,9 +76,15 @@ class CameraModelManager : IResetable<BoundParameters>
 
     public CameraBase ActiveModel => _modes.Find(x => x.Index == _currentModelIndex);
 
-    public void Reset(BoundParameters boundParameters)
+    public void ResetModel()
     {
         _currentModelIndex = _uniqueRandom.Next(_currentModelIndex);
+    }
+
+    public bool ActiveModelUsesBounds => ActiveModel is not StaticCamera;
+
+    public void Reset(BoundParameters boundParameters)
+    {
         boundParameters.Reset(default);
 
         _modes.ForEach(x =>
