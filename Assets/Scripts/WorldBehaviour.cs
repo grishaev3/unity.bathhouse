@@ -1,6 +1,9 @@
-﻿using Assets.Scripts.Types;
-using System.Collections;
+﻿using System.Collections;
+using Assets.Scripts.Types;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -22,6 +25,23 @@ public class WorldBehaviour : MonoBehaviour
         UnityEngine.Physics.sleepThreshold = _settings.Physics.SleepThreshold;
         UnityEngine.Physics.defaultSolverIterations = _settings.Physics.DefaultSolverIterations;
         UnityEngine.Physics.defaultSolverVelocityIterations = _settings.Physics.DefaultSolverVelocityIterations;
+
+        MeshRenderer[] renderers = FindObjectsByType<MeshRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (MeshRenderer renderer in renderers)
+        {
+            // Cast Shadows: On
+            renderer.shadowCastingMode = ShadowCastingMode.On;
+
+            // Ray Tracing Mode: Static
+            renderer.rayTracingMode = RayTracingMode.Static;
+
+
+            // Motion Vectors: Camera Motion Only
+            renderer.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
+
+            // Dynamic Occlusion: true
+            renderer.allowOcclusionWhenDynamic = true;
+        }
     }
 
     void Update()

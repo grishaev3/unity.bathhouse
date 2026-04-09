@@ -23,15 +23,15 @@ abstract class CameraBase : IPeriod
     {
         _from = _funcLookFrom(normalizedTime, camera);
 
-        if (_directionType == CameraDirectionType.Direct)
-        {
-            _at = new Vector3(_from.x, _from.y, _from.z - 1f);
-        }
-        else if (_funcLookAt != null)
+        if (_funcLookAt != null)
         {
             _at = _funcLookAt(normalizedTime, camera);
         }
-        else if (_funcLookAt == null || _directionType == CameraDirectionType.Center)
+        else if (_directionType == CameraDirectionType.Direct)
+        {
+            _at = new Vector3(_from.x, _from.y, _from.z - 1f);
+        }
+        else if (_directionType == CameraDirectionType.Center)
         {
             _at = new Vector3(_from.x, _from.y, -2f);
         }

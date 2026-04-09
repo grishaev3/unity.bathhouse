@@ -17,7 +17,7 @@ class BoundParameters : IResetable<int>
         Bound = bound;
         CameraMovesets = cameraMovesets;
 
-        _uniqueRandom = new UniqueRandom(0, cameraMovesets.Length);
+        _uniqueRandom = new UniqueRandom(nameof(cameraMovesets), 0, cameraMovesets.Length);
         _currentModelIndex = _uniqueRandom.Next();
     }
 

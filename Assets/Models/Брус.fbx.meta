@@ -24,6 +24,36 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Material.003
     second: {fileID: 2100000, guid: 1ac4f6433b7e8114498f124fc4ee2c11, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Material.\u041A\u0440\u044B\u0448\u0430"
+    second: {fileID: 2100000, guid: 30edf355d80782a4e990b08ef4646211, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Material.\u041E\u0431\u0448\u0438\u0432\u043A\u0430.\u0412\u043D\u0435\u0448\u043D\u044F\u044F.\u0412\u0435\u0440\u0445"
+    second: {fileID: 2100000, guid: 873b3549a97179645aef5e9033fde8a0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Material.\u041E\u0431\u0448\u0438\u0432\u043A\u0430.\u0412\u043D\u0435\u0448\u043D\u044F\u044F.\u041D\u0438\u0437"
+    second: {fileID: 2100000, guid: e0b2d61d33df55741ac18028421a42e5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Material.\u041E\u0431\u0448\u0438\u0432\u043A\u0430.\u0412\u043D\u0443\u0442\u0440\u0438"
+    second: {fileID: 2100000, guid: cbf7a2b5a86c2c94491f85ec39405791, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Material.\u0421\u0442\u0435\u043D\u044B.\u0412\u043D\u0443\u0442\u0440\u0438"
+    second: {fileID: 2100000, guid: f652215f6f3c1ef42b4f7dee96805ac5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Material.\u0424\u0443\u043D\u0434\u0430\u043C\u0435\u043D\u0442"
+    second: {fileID: 2100000, guid: 63bf9d1f0ddcd404593e5d00f56c9aa0, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -50,19 +80,19 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
-    meshCompression: 0
+    meshCompression: 3
     addColliders: 0
     useSRGBMaterialColor: 1
-    sortHierarchyByName: 1
+    sortHierarchyByName: 0
     importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
@@ -89,17 +119,17 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    strictVertexDataChecks: 0
+    strictVertexDataChecks: 1
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 0
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 1
+  importAnimation: 0
   humanDescription:
     serializedVersion: 3
     human: []
@@ -114,11 +144,11 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1

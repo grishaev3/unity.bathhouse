@@ -92,7 +92,7 @@ class LinearBase : CameraBase
                     end = bound.min.x;
                 }
 
-                var height = bound.min.y + bound.size.y * _direction.y;
+                float height = bound.min.y + bound.size.y * _direction.y;
                 A = new Vector3(start, height, z);
                 B = new Vector3(end, height, z);
 
@@ -159,6 +159,7 @@ class LinearBase : CameraBase
             return Mathf.Abs(x) == float.MaxValue || Mathf.Abs(x) == float.MinValue;
         }
     }
+
     internal enum DirectionType
     {
         Zero,

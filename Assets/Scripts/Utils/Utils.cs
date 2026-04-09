@@ -16,31 +16,21 @@ public class Vector3Extender
 
 class UniqueRandom
 {
-    internal enum Type
-    {
-        Simple,
-        Freq
-    }
-
     private readonly System.Random _random = new();
-    private readonly Type _type;
 
     private double[] _cumulativeProbs;
     private int[] _values;
 
-
-    public UniqueRandom(int minValue, int maxValue, Type type = Type.Freq)
+    public UniqueRandom(string name, int minValue, int maxValue)
     {
-        _type = type;
         var values = Enumerable.Range(minValue, maxValue - minValue).ToArray();
         var probabilities = values.Select(x => 1.0d / values.Length).ToArray();
 
         CtorImpl(values, probabilities);
     }
 
-    public UniqueRandom(int minValue, int maxValue, double[] probabilities, Type type = Type.Freq)
+    public UniqueRandom(string name, int minValue, int maxValue, double[] probabilities)
     {
-        _type = type;
         var values = Enumerable.Range(minValue, maxValue - minValue).ToArray();
 
         CtorImpl(values, probabilities);
@@ -64,37 +54,31 @@ class UniqueRandom
         }
     }
 
-    /// <summary>
-    /// prev - спец.режим для камеры
-    /// </summary>
-    /// <param name="prev"></param>
-    /// <returns></returns>
-    public int Next(int previousValue = 0)
+    public int Next(int previousValue = -1)
     {
-        if (_type == Type.Simple)
+        int result;
+        do
         {
-            int newValue = _random.Next(_values.First(), _values.Last());
-            return newValue >= previousValue ? newValue + 1 : newValue;
+            double r = _random.NextDouble();
+            int left = 0, right = _cumulativeProbs.Length - 1;
+            while (left <= right)
+            {
+                int mid = (left + right) / 2;
+                if (_cumulativeProbs[mid] < r)
+                    left = mid + 1;
+                else
+                    right = mid - 1;
+            }
+            result = _values[left];
         }
+        while (result == previousValue && _values.Length > 1);
 
-        double r = _random.NextDouble();
-        // Бинарный поиск для эффективности (O(log n))
-        int left = 0, right = _cumulativeProbs.Length - 1;
-        while (left <= right)
-        {
-            int mid = (left + right) / 2;
-            if (_cumulativeProbs[mid] < r)
-                left = mid + 1;
-            else
-                right = mid - 1;
-        }
-        return _values[left];
+        return result;
     }
 
     public static bool NextBool()
     {
         return UnityEngine.Random.Range(0, int.MaxValue) % 2 == 0;
     }
-
 }
 

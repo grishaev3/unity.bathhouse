@@ -23,15 +23,16 @@ class CameraModelManager : IResetable<BoundParameters>
 
         float oftenFreq = 0.5f;
         float rarelyFreq = 0.3f;
-        float staticFreq = (1.0f - (oftenFreq + rarelyFreq)) / 4;
+        float staticFreq = (1.0f - (oftenFreq + rarelyFreq)) / 6;
         _modes = new List<CameraBase>()
         {
             // смотрим сверху
-            new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, center),
+            new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, direct),
             new LinearRandom(rarelyFreq, duration, Linear, "Random", boundParameters, direct),
 
             new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
             new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(+5f, 1.97f, 0f), new Vector3(-5f, 1.97f, 0f), "Static1"),
+
             new StaticCamera(staticFreq, duration,
                 funcLookFrom: (_, _) => new Vector3(3.50f, 0f, -0.47f),
                 funcLookTo: Linear,
@@ -67,7 +68,7 @@ class CameraModelManager : IResetable<BoundParameters>
         }
 
         double[] probabilities = _modes.Select(x => (double)x.Freq).ToArray();
-        _uniqueRandom = new UniqueRandom(0, _modes.Count, probabilities, UniqueRandom.Type.Simple);
+        _uniqueRandom = new UniqueRandom(nameof(_modes), 0, _modes.Count, probabilities);
 
         _currentModelIndex = _uniqueRandom.Next();
         boundParameters.Reset(default);
@@ -75,9 +76,15 @@ class CameraModelManager : IResetable<BoundParameters>
 
     public CameraBase ActiveModel => _modes.Find(x => x.Index == _currentModelIndex);
 
-    public void Reset(BoundParameters boundParameters)
+    public void ResetModel()
     {
         _currentModelIndex = _uniqueRandom.Next(_currentModelIndex);
+    }
+
+    public bool ActiveModelUsesBounds => ActiveModel is not StaticCamera;
+
+    public void Reset(BoundParameters boundParameters)
+    {
         boundParameters.Reset(default);
 
         _modes.ForEach(x =>
