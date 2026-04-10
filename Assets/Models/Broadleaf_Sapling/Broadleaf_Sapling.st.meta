@@ -31,8 +31,8 @@ SpeedTreeImporter:
   animateCrossFading: 1
   billboardTransitionCrossFadeWidth: 0.25
   fadeOutWidth: 0.25
-  scaleFactor: 1.5
-  unitConversionEnumValue: 4
+  scaleFactor: 0.3048
+  unitConversionEnumValue: 0
   motionVectorModeEnumValue: 1
   generateColliders: 0
   generateRigidbody: 0
