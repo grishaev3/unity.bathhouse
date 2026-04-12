@@ -11,8 +11,8 @@ class CameraModelManager : IResetable<BoundParameters>
     private readonly Settings _settings;
 
     private int _currentModelIndex;
-    private readonly UniqueRandom _uniqueRandom;
-    private readonly List<CameraBase> _modes;
+    private readonly INumberProvider _uniqueRandom;
+    private readonly List<CameraBase> _cameraModels;
 
     public CameraModelManager(BoundParameters boundParameters, Settings settings)
     {
@@ -24,7 +24,7 @@ class CameraModelManager : IResetable<BoundParameters>
         float oftenFreq = 0.5f;
         float rarelyFreq = 0.3f;
         float staticFreq = (1.0f - (oftenFreq + rarelyFreq)) / 6;
-        _modes = new List<CameraBase>()
+        _cameraModels = new List<CameraBase>()
         {
             // смотрим сверху
             new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, direct),
@@ -62,19 +62,20 @@ class CameraModelManager : IResetable<BoundParameters>
 
         };
 
-        for (int i = 0; i < _modes.Count; i++)
+        for (int i = 0; i < _cameraModels.Count; i++)
         {
-            _modes[i].Index = i;
+            _cameraModels[i].Index = i;
         }
 
-        double[] probabilities = _modes.Select(x => (double)x.Freq).ToArray();
-        _uniqueRandom = new UniqueRandom(nameof(_modes), 0, _modes.Count, probabilities);
+        // вероятность _modes зависит от freq
+        double[] probabilities = _cameraModels.Select(x => (double)x.Freq).ToArray();
+        _uniqueRandom = NumberProviderFactory.New(nameof(_cameraModels), 0, _cameraModels.Count, probabilities);
 
         _currentModelIndex = _uniqueRandom.Next();
         boundParameters.Reset(default);
     }
 
-    public CameraBase ActiveModel => _modes.Find(x => x.Index == _currentModelIndex);
+    public CameraBase ActiveModel => _cameraModels.Find(x => x.Index == _currentModelIndex);
 
     public void ResetModel()
     {
@@ -87,13 +88,13 @@ class CameraModelManager : IResetable<BoundParameters>
     {
         boundParameters.Reset(default);
 
-        _modes.ForEach(x =>
+        _cameraModels.ForEach(x =>
         {
             x.Reset(boundParameters);
         });
     }
 
-    public int Count => _modes.Count;
+    public int Count => _cameraModels.Count;
 
     private Vector3 Linear(float normalizedTime, CameraBase model) => model switch
     {

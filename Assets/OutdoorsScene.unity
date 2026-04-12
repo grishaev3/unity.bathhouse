@@ -4871,8 +4871,12 @@ PrefabInstance:
       value: Broadleaf_Sapling
       objectReference: {fileID: 0}
     - target: {fileID: 4742473837712756890, guid: 69f77c9fa3200474ca8236bfbdcc2712, type: 3}
+      propertyPath: m_Size
+      value: 5.082453
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742473837712756890, guid: 69f77c9fa3200474ca8236bfbdcc2712, type: 3}
       propertyPath: m_LODs.Array.data[0].screenRelativeHeight
-      value: 0
+      value: 0.001967554
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

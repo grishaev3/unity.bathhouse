@@ -21,14 +21,14 @@ namespace Assets.Scripts.Types
 
     internal class Physics
     {
-        public bool EnableSimulation => false;
-        public float SleepThreshold => 0.005f;
-        public int DefaultSolverIterations => 20;
-        public int DefaultSolverVelocityIterations => 8;
+        public bool EnableSimulation => true;
+        public float SleepThreshold => 0.001f;
+        public int DefaultSolverIterations => 25;
+        public int DefaultSolverVelocityIterations => 10;
 
         public float DynamicFriction => 0.7f;
         public float StaticFriction => 0.8f;
-        public float Bounciness => 0.05f;
+        public float Bounciness => 0.01f;
     }
 
     internal class Timer

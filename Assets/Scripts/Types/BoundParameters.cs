@@ -1,8 +1,9 @@
+using System.Linq;
 using UnityEngine;
 
 class BoundParameters : IResetable<int>
 {
-    private UniqueRandom _uniqueRandom;
+    private INumberProvider _uniqueRandom;
     private int _currentModelIndex;
 
     public string Description { get; private set; }
@@ -17,7 +18,9 @@ class BoundParameters : IResetable<int>
         Bound = bound;
         CameraMovesets = cameraMovesets;
 
-        _uniqueRandom = new UniqueRandom(nameof(cameraMovesets), 0, cameraMovesets.Length);
+        // defaultMoveset равно вероятностный
+        double[] probabilities = cameraMovesets.Select(x => 1.0d / cameraMovesets.Length).ToArray();
+        _uniqueRandom = NumberProviderFactory.New(nameof(cameraMovesets), 0, cameraMovesets.Length, probabilities);
         _currentModelIndex = _uniqueRandom.Next();
     }
 

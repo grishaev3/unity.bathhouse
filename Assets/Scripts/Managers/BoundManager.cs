@@ -5,7 +5,7 @@ using UnityEngine;
 class BoundManager : IResetable<string>
 {
     private int _currentBoundIndex;
-    private readonly UniqueRandom _uniqueRandom;
+    private readonly INumberProvider _uniqueRandom;
     private readonly BoundParameters[] _bounds;
 
     public BoundManager()
@@ -32,8 +32,9 @@ class BoundManager : IResetable<string>
             new(0.4f, "Дом.2", FromZero(new Vector3(-8.2f, 0.5f, 19.4f), new Vector3(10f, 5f, -10f)), defaultMoveset),
         };
 
+        // вероятность _bounds зависит от freq
         double[] probabilities = _bounds.Select(x => (double)x.Freq).ToArray();
-        _uniqueRandom = new UniqueRandom(nameof(_bounds), 0, _bounds.Count(), probabilities);
+        _uniqueRandom = NumberProviderFactory.New(nameof(_bounds), 0, _bounds.Count(), probabilities);
     }
 
     public BoundParameters ActiveBound => _bounds[_currentBoundIndex];

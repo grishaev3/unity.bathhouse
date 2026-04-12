@@ -10,7 +10,7 @@ public class DynamicBehaviour : MonoBehaviour
     public bool debug = false;
 
     [Header("Wood Density")]
-    public float woodDensity = 500f; // кг/м³ (сосна: 400-600)
+    public float woodDensity = 700f; // кг/м³ (сосна: 400-600)
 
     [Inject] private readonly Settings _settings;
 
@@ -88,27 +88,31 @@ public class DynamicBehaviour : MonoBehaviour
             MeshFilter meshFilter = child.GetComponent<MeshFilter>();
             if (meshFilter != null && meshFilter.sharedMesh != null)
             {
-                Mesh yourMesh = meshFilter.sharedMesh;
-                MeshCollider сollider = child.gameObject.AddComponent<MeshCollider>();
-                сollider.sharedMesh = yourMesh;
-                сollider.material = _physicsMaterial;
-                сollider.convex = true;
+                //BoxCollider collider = child.gameObject.AddComponent<BoxCollider>();
+                //collider.material = _physicsMaterial;
 
-                size = сollider.bounds.size;
-                mass = (woodDensity * size.x * size.y * size.z);
+                Mesh yourMesh = meshFilter.sharedMesh;
+                MeshCollider collider = child.gameObject.AddComponent<MeshCollider>();
+                collider.sharedMesh = yourMesh;
+                collider.material = _physicsMaterial;
+                collider.convex = true;
+
+                Vector3 s = collider.bounds.size;
+                Vector3 worldScale = transform.lossyScale;
+                float volume = (s.x * worldScale.x) * (s.y * worldScale.y) * (s.z * worldScale.z);
+                mass = woodDensity * volume;
             }
 
             Renderer renderer = child.GetComponent<Renderer>();
             if (child.GetComponent<Rigidbody>() == null && renderer != null)
             {
                 Rigidbody rigidbody = child.gameObject.AddComponent<Rigidbody>();
-
-                //rigidbody.mass = mass;
+                rigidbody.mass = mass;
                 rigidbody.useGravity = true;
                 rigidbody.solverIterations = _solverIterations;
                 rigidbody.solverVelocityIterations = _solverVelocityIterations;
                 rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-                //rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             }
         }
     }
