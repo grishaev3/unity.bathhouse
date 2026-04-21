@@ -1,5 +1,5 @@
-﻿using Assets.Scripts.Types;
-using System;
+﻿using System;
+using Assets.Scripts.Types;
 using UnityEngine;
 using Zenject;
 using static TimeManager;
@@ -8,6 +8,7 @@ public class SunBehaviour : MonoBehaviour
 {
     private Light _sunLight;
     private Light _areaLight;
+    private UnityEngine.Camera _camera;
 
     [Inject] private readonly TimeManager _timeManager;
     [Inject] private readonly Settings _settings;
@@ -16,6 +17,14 @@ public class SunBehaviour : MonoBehaviour
     private Vector2 _altitude;
     private Vector2 _azimuth;
     private IPeriod _period;
+
+    private readonly float[] isoTable = new float[24]
+    {
+        12800, 12800, 12800, 12800, 12800, 6400,    // 00-05
+        1600, 400, 200, 100, 100, 100,              // 06-11
+        100, 100, 100, 100, 100, 200,               // 12-17
+        400, 1600, 3200, 6400, 12800, 12800         // 18-23
+    };
 
     private (TimeSpan A, TimeSpan B) _currentTimeRange;
 
@@ -56,6 +65,7 @@ public class SunBehaviour : MonoBehaviour
 
         _sunLight = GetComponent<Light>("Sun");
         _areaLight = GetComponent<Light>("AreaLight");
+        _camera = GetComponent<UnityEngine.Camera>();
 
         InitFromCurrentHour(_timeManager.CurrentHour);
     }
@@ -78,17 +88,23 @@ public class SunBehaviour : MonoBehaviour
         {
             InitFromCurrentHour(_timeManager.CurrentHour);
 
-            SwitchLighting(altitude);
+            SwitchLighting();
         }
+
+        int hourIndex = Mathf.FloorToInt(_timeManager.CurrentHour);
+        int nextHourIndex = (hourIndex + 1) % 24;
+        float t = _timeManager.CurrentHour - hourIndex;
+        float lerpedISO = Mathf.Lerp(isoTable[hourIndex], isoTable[nextHourIndex], t);
+        _camera.iso = (int)lerpedISO;
     }
 
-    private void SwitchLighting(float altitude)
+    private void SwitchLighting()
     {
         //_volume.profile.TryGet(out Exposure exposure);
         //exposure.mode.value = ExposureMode.UsePhysicalCamera;
         //_sunLight.intensity = 100000f;
 
-        switch (_timeManager.GetSunCircle(altitude))
+        switch (_timeManager.GetSunCircle())
         {
             case SunCircle.Night:
                 _areaLight.enabled = true;

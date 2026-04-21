@@ -10,7 +10,7 @@ interface INumberProvider
 static class NumberProviderFactory
 {
     private static Dictionary<string, List<int>> _seq;
-    private static bool _benchmark = true;
+    private static bool _benchmark = false;
 
     public static void Record(string name, int value)
     {

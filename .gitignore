@@ -63,6 +63,7 @@ sysinfo.txt
 *.app
 
 *.dll
+*.blend1
 
 # Crashlytics generated file
 crashlytics-build.properties

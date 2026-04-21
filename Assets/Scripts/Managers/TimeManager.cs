@@ -42,14 +42,11 @@ class TimeManager : IResetable<double>
         return (float)(Lerp(a, b, normalizedTime).TotalSeconds / TimeSpan.FromDays(1).TotalSeconds);
     }
 
-    public SunCircle GetSunCircle(float altitude)
+    public SunCircle GetSunCircle() => _currentHour switch
     {
-        return _currentHour switch
-        {
-            >= 4 and <= 20 => SunCircle.Day,
-            _ => SunCircle.Night
-        };
-    }
+        >= 4 and <= 20 => SunCircle.Day,
+        _ => SunCircle.Night
+    };
 
     public bool IsPeriodEnded(float normalizedTime)
     {

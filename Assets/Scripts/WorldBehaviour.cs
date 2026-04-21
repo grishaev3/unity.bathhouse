@@ -31,24 +31,24 @@ public class WorldBehaviour : MonoBehaviour
         UnityEngine.Physics.defaultSolverIterations = _settings.Physics.DefaultSolverIterations;
         UnityEngine.Physics.defaultSolverVelocityIterations = _settings.Physics.DefaultSolverVelocityIterations;
 
-        MeshRenderer[] renderers = FindObjectsByType<MeshRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (MeshRenderer renderer in renderers)
-        {
-            // Cast Shadows: On
-            renderer.shadowCastingMode = ShadowCastingMode.On;
+        //MeshRenderer[] renderers = FindObjectsByType<MeshRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        //foreach (MeshRenderer renderer in renderers)
+        //{
+        //    // Cast Shadows: On
+        //    renderer.shadowCastingMode = ShadowCastingMode.On;
 
-            // Ray Tracing Mode: Static
-            renderer.rayTracingMode = RayTracingMode.Static;
+        //    // Ray Tracing Mode: Static
+        //    renderer.rayTracingMode = RayTracingMode.Static;
 
 
-            // Motion Vectors: Camera Motion Only
-            renderer.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
+        //    // Motion Vectors: Camera Motion Only
+        //    renderer.motionVectorGenerationMode = MotionVectorGenerationMode.Camera;
 
-            // Dynamic Occlusion: true
-            renderer.allowOcclusionWhenDynamic = true;
-        }
+        //    // Dynamic Occlusion: true
+        //    renderer.allowOcclusionWhenDynamic = true;
+        //}
 
-        StartCoroutine(TimerCoroutine());
+        // TODO: Settings StartCoroutine(TimerCoroutine());
     }
 
     void Update()

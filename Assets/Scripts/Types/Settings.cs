@@ -33,7 +33,7 @@ namespace Assets.Scripts.Types
 
     internal class Timer
     {
-        public int HourStart = 5;
+        public int HourStart = 0;
         public int HourEnd = 23;
 
         public TimeSpan CameraModelDuration => TimeSpan.FromSeconds(10);

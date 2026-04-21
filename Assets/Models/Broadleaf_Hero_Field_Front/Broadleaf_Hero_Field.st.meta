@@ -1,7 +1,22 @@
 fileFormatVersion: 2
 guid: a46e20553733bce47b61ad8841303eaf
 SpeedTreeImporter:
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Broadleaf_Hero_Field
+    second: {fileID: 2100000, guid: 7bf200f8ed2339043ac03b670b2ef973, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Main_Bark
+    second: {fileID: 2100000, guid: 3c1509293ff5a1044810015663f1e0c0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Shell_Bark
+    second: {fileID: 2100000, guid: a10cc96e57e9d5f42aa4966486cf7605, type: 2}
   serializedVersion: 7
   mainColor: {r: 1, g: 1, b: 1, a: 1}
   hueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}
