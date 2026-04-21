@@ -12,7 +12,7 @@ public class CameraBehaviour : MonoBehaviour
 
     void Start()
     {
-        IsPeriodEnded(float.MaxValue);
+        OnPeriodEnd(float.MaxValue);
     }
 
     void LateUpdate()
@@ -25,12 +25,11 @@ public class CameraBehaviour : MonoBehaviour
 
         transform.position = lookFrom;
         transform.LookAt(lookAt);
-        // TODO: if (_stateManager.ActiveCameraMode)
 
-        IsPeriodEnded(normalizedTime);
+        OnPeriodEnd(normalizedTime);
     }
 
-    private void IsPeriodEnded(float normalizedTime)
+    private void OnPeriodEnd(float normalizedTime)
     {
         if (normalizedTime < 0.999f)
         {

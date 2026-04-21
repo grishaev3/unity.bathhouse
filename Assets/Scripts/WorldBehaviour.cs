@@ -1,11 +1,9 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Types;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Assets.Scripts.Types;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using Zenject;
 
@@ -14,8 +12,7 @@ public class WorldBehaviour : MonoBehaviour
 {
     [Inject] private readonly Settings _settings;
 
-    private List<float> fpsBuffer = new List<float>();
-    private bool isRecording = true;
+    private List<float> _fpsBuffer = new();
 
     void Awake()
     {
@@ -48,16 +45,20 @@ public class WorldBehaviour : MonoBehaviour
         //    renderer.allowOcclusionWhenDynamic = true;
         //}
 
-        // TODO: Settings StartCoroutine(TimerCoroutine());
+        NumberProviderFactory.Configure(_settings.IsBenchmarking);
+        if (_settings.IsBenchmarking)
+        {
+            StartCoroutine(TimerCoroutine());
+        }
     }
 
     void Update()
     {
-        if (isRecording)
+        if (_settings.IsBenchmarking)
         {
             // Считаем текущий кадр (1 / время кадра)
             float currentFPS = 1.0f / Time.unscaledDeltaTime;
-            fpsBuffer.Add(currentFPS);
+            _fpsBuffer.Add(currentFPS);
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -81,19 +82,19 @@ public class WorldBehaviour : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(60f);
 
-        isRecording = false;
+        _settings.IsBenchmarking = false;
 
         SaveResultAndExit();
     }
 
     void SaveResultAndExit()
     {
-        float averageFPS = fpsBuffer.Count > 0 ? fpsBuffer.Average() : 0f;
+        float averageFPS = _fpsBuffer.Count > 0 ? _fpsBuffer.Average() : 0f;
 
         string path = Path.Combine(Directory.GetCurrentDirectory(), "fps_report.txt");
 
         string report = $"\nAverage FPS over 1 minute: {averageFPS:F2}\n" +
-                        $"Total frames: {fpsBuffer.Count}\n" +
+                        $"Total frames: {_fpsBuffer.Count}\n" +
                         $"Date: {System.DateTime.Now}";
 
         File.AppendAllText(path, report);

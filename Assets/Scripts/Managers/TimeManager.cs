@@ -10,17 +10,15 @@ class TimeManager : IResetable<double>
         Night
     }
 
-    private double _msCurrentTime = 0d;
-    private double _normalizedTime = 0d;
-    private int _currentHour;
-
     private readonly Settings _settings;
 
-    public float NormalizedTime => (float)_normalizedTime;
+    private int _currentHour;
+    private double _msCurrentTime = 0d;
+    private double _normalizedTime = 0d;
 
     public int CurrentHour => _currentHour;
+    public float NormalizedTime => (float)_normalizedTime;
 
-    
     public TimeManager(Settings settings)
     {
         _settings = settings;
@@ -48,7 +46,7 @@ class TimeManager : IResetable<double>
         _ => SunCircle.Night
     };
 
-    public bool IsPeriodEnded(float normalizedTime)
+    public bool OnPeriodEnd(float normalizedTime)
     {
         if (normalizedTime < 0.999f)
         {

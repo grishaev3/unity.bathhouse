@@ -9,33 +9,14 @@ interface INumberProvider
 
 static class NumberProviderFactory
 {
-    private static Dictionary<string, List<int>> _seq;
-    private static bool _benchmark = false;
+    private static bool _isBenchmarking;
 
-    public static void Record(string name, int value)
-    {
-        _seq ??= new Dictionary<string, List<int>>();
-
-        //string json = JsonSerializer.Serialize(_seq, new JsonSerializerOptions { WriteIndented = true });
-
-        if (_seq.TryGetValue(name, out List<int> list))
-        {
-            list.Add(value);
-        }
-        else
-        {
-            list = new List<int>
-            {
-                value
-            };
-            _seq[name] = list;
-        }
-    }
+    internal static void Configure(bool isBenchmarking) => _isBenchmarking = isBenchmarking;
 
     public static INumberProvider New(string name, int minValue, int maxValue, double[] probabilities)
     {
         INumberProvider item;
-        if (!_benchmark)
+        if (!_isBenchmarking)
         {
             item = new UniqueRandom(name, minValue, maxValue, probabilities);
         }
@@ -131,8 +112,6 @@ class UniqueRandom : INumberProvider
             result = _values[left];
         }
         while (result == previousValue && _values.Length > 1);
-
-        NumberProviderFactory.Record(_name, result);
 
         return result;
     }

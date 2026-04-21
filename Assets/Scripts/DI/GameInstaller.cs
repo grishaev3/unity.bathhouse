@@ -1,5 +1,4 @@
 using Assets.Scripts.Types;
-using UnityEngine;
 using Zenject;
 
 public class GameInstaller : MonoInstaller
@@ -9,6 +8,7 @@ public class GameInstaller : MonoInstaller
 
         Container.Bind<BoundManager>().AsSingle().NonLazy();
         Container.Bind<StateManager>().AsSingle().NonLazy();
+
         Container.Bind<TimeManager>().FromMethod((context) =>
         {
             var settings = context.Container.Resolve<Settings>();

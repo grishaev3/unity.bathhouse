@@ -54,6 +54,8 @@ namespace Assets.Scripts.Types
         public int TargetFPS { get; set; }
         public int SyncCount { get; set; }
 
+        public bool IsBenchmarking { get; set; } = false;
+
         public Physics Physics { get; } = new Physics();
 
         public Timer Timer { get; } = new Timer();

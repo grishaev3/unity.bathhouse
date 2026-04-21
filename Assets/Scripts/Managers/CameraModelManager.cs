@@ -1,9 +1,7 @@
-using Assets.Scripts;
 using Assets.Scripts.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 class CameraModelManager : IResetable<BoundParameters>
@@ -18,8 +16,6 @@ class CameraModelManager : IResetable<BoundParameters>
     {
         _settings = settings;
         TimeSpan duration = _settings.Timer.CameraModelDuration;
-        CameraDirectionType center = CameraDirectionType.Center;
-        CameraDirectionType direct = CameraDirectionType.Center;
 
         float oftenFreq = 0.5f;
         float rarelyFreq = 0.3f;
@@ -27,8 +23,8 @@ class CameraModelManager : IResetable<BoundParameters>
         _cameraModels = new List<CameraBase>()
         {
             // смотрим сверху
-            new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, direct),
-            new LinearRandom(rarelyFreq, duration, Linear, "Random", boundParameters, direct),
+            new LinearBase(oftenFreq, duration, Linear, "Linear", boundParameters, CameraDirectionType.Center),
+            new LinearRandom(rarelyFreq, duration, Linear, "Random", boundParameters, CameraDirectionType.Center),
 
             new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(-5f, 1.97f, 0f), new Vector3(+5f, 1.97f, 0f), "Static0"),
             new StaticCamera(staticFreq, duration, (_, _) => new Vector3(-0.63f, 1.97f, +6.00f), Linear, new Vector3(+5f, 1.97f, 0f), new Vector3(-5f, 1.97f, 0f), "Static1"),
