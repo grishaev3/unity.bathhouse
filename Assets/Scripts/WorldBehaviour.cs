@@ -99,12 +99,13 @@ public class WorldBehaviour : MonoBehaviour
 
         File.AppendAllText(path, report);
 
+#if UNITY_EDITOR
         Debug.Log($"Отчет сохранен: {path}");
 
-#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
             Application.Quit();
 #endif
+
     }
 }

@@ -48,11 +48,15 @@ public class CameraBehaviour : MonoBehaviour
             BoundParameters activeBound = _boundManager.ActiveBound;
             _modelManager.Reset(activeBound);
 
+#if UNITY_EDITOR
             Debug.Log($"_currentMode: {activeBound.Description}-{model.Name}");
+#endif
         }
         else
         {
+#if UNITY_EDITOR
             Debug.Log($"_currentMode: {model.Name}");
+#endif
         }
     }
 }

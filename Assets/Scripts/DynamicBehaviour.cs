@@ -219,7 +219,6 @@ public class DynamicBehaviour : MonoBehaviour
             MeshFilter meshFilter = child.GetComponent<MeshFilter>();
             if (meshFilter == null || meshFilter.mesh == null)
             {
-                Debug.LogError("MeshFilter или mesh не найден!");
                 continue;
             }
 

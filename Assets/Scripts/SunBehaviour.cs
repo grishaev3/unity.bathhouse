@@ -17,36 +17,27 @@ public class SunBehaviour : MonoBehaviour
     private Vector2 _azimuth;
     private IPeriod _period;
 
-    private readonly float[] isoTable = new float[24]
-    {
-        12800, 12800, 12800, 12800, // 00-03: Ночь (Alt < 0)
-        3200,  // 04:00: Солнце вышло (+1.14°), сразу снижаем чувствительность
-        800,   // 05:00: (+7.56°)
-        400,   // 06:00: (+15.11°)
-        200,   // 07:00: (+23.27°)
-        100, 100, 100, 100, 100,    // 08-12: Яркий день (Alt до +57.19°)
-        100, 100, 100, 100, 100,    // 13-17: Яркий день
-        200,   // 18:00: (+23.50°) Начало заката
-        400,   // 19:00: (+15.33°)
-        800,   // 20:00: (+7.76°)
-        3200,  // 21:00: (+1.29°) Солнце почти зашло, повышаем ISO
-        12800, // 22:00: (-4.50°) Ночь
-        12800  // 23:00: Ночь
+    // lux рассчитан как 35000 * sin(altitude) / sin(57.24°), симметрично по высоте солнца
+    private readonly float[] sunIntensityTable = new float[] {
+        0,     0,     0,     0,     800,   5500,  // 00-05
+        11000, 16500, 22000, 27000, 31000, 34000, // 06-11
+        35000, 35000, 34000, 31000, 27000, 22000, // 12-17
+        17000, 11000, 5500,  1000,  0,     0      // 18-23
     };
 
-    private readonly float[] sunIntensityTable = new float[]
-    {
-        0, 0, 0, 0,            // 00-03: Выключено
-        1000,  // 04:00: Первый свет
-        5000,  // 05:00:
-        12000, // 06:00:
-        20000, // 07:00:
-        30000, 35000, 35000, 35000, // 08-11: Нарастание до пика
-        35000, 35000, 35000, 35000, // 12-15: Пик
-        30000, 20000, 12000, 5000,  // 16-19: Угасание
-        2000,  // 20:00: Сумерки
-        500,   // 21:00: Последний луч
-        0, 0   // 22-23: Выключено
+    // ISO и диафрагма подобраны к lux-значениям, симметричны утро/вечер
+    private readonly float[] isoTable = new float[] {
+        12800, 12800, 12800, 12800, 3200,  800,   // 00-05
+        400,   200,   100,   100,   100,   100,   // 06-11
+        100,   100,   100,   100,   100,   100,   // 12-17
+        200,   400,   800,   3200,  12800, 12800  // 18-23
+    };
+
+    private readonly float[] apertureTable = new float[] {
+        2.8f, 2.8f, 2.8f, 2.8f, 3.2f, 4.5f,     // 00-05
+        6.3f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f,     // 06-11
+        8.0f, 8.0f, 8.0f, 8.0f, 8.0f, 8.0f,     // 12-17
+        8.0f, 6.3f, 4.5f, 3.2f, 2.8f, 2.8f      // 18-23
     };
 
 
@@ -113,13 +104,22 @@ public class SunBehaviour : MonoBehaviour
         int hourIndex = Mathf.FloorToInt(_timeManager.CurrentHour);
         int nextHourIndex = (hourIndex + 1) % 24;
 
-        float lerpedISO = Mathf.Lerp(isoTable[hourIndex], isoTable[nextHourIndex], normalizedTime);
-        _camera.iso = (int)lerpedISO;
+        // Физические параметры камеры (через актуальные свойства)
+        int iso = Mathf.FloorToInt(Mathf.Lerp(isoTable[hourIndex], isoTable[nextHourIndex], normalizedTime));
+        float aperture = Mathf.Lerp(apertureTable[hourIndex], apertureTable[nextHourIndex], normalizedTime);
 
-        float targetIntensity = Mathf.Lerp(sunIntensityTable[hourIndex], sunIntensityTable[nextHourIndex], normalizedTime);
-        _sunLight.intensity = targetIntensity;
+        _camera.iso = iso;
+        _camera.aperture = aperture;
+        _camera.shutterSpeed = 0.01f; // Фиксируем 1/100
 
-        Debug.Log($"{_timeManager.CurrentHour} {lerpedISO}");
+        // Интенсивность солнца (Lux)
+        float intensity = Mathf.Lerp(sunIntensityTable[hourIndex], sunIntensityTable[nextHourIndex], normalizedTime);
+        _sunLight.intensity = intensity;
+
+        // Оптимизация теней (выключаем ночью для экономии ресурсов)
+        _sunLight.shadows = (intensity > 0.1f) ? LightShadows.Soft : LightShadows.None;
+
+        Debug.Log($"current_hour: {_timeManager.CurrentHour} iso: {iso} aperture: {aperture} intensity:{intensity}");
     }
 
     private void SwitchLighting()
@@ -143,7 +143,7 @@ public class SunBehaviour : MonoBehaviour
     private void InitFromCurrentHour(int currentHour)
     {
         var a = Array.Find(_solarData, x => x.timeOfDay == new TimeSpan((currentHour % 24) + 0, 0, 0));
-        var b = Array.Find(_solarData, x => x.timeOfDay == new TimeSpan((currentHour % 24) + 1, 0, 0));
+        var b = Array.Find(_solarData, x => x.timeOfDay == new TimeSpan((currentHour + 1) % 24, 0, 0));
 
         _currentTimeRange.A = a.timeOfDay;
         _currentTimeRange.B = b.timeOfDay;
